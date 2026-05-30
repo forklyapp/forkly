@@ -927,9 +927,10 @@ footer a{color:var(--terracotta);text-decoration:none}
       </div>
 
       <!-- PRO -->
-      <div class="price-card">
+      <div class="price-card featured">
+        <div class="featured-badge">Most popular</div>
         <div class="plan-name">Pro</div>
-        <div class="plan-price"><span class="price-amount" id="pro-price">$4.99</span><span class="price-period">/mo</span></div>
+        <div class="plan-price"><span class="price-amount" id="pro-price">$7.99</span><span class="price-period">/mo</span></div>
         <div class="price-annual" id="pro-annual">&nbsp;</div>
         <hr class="plan-divider">
         <ul class="plan-features">
@@ -944,12 +945,11 @@ footer a{color:var(--terracotta);text-decoration:none}
           <li class="muted">Servings scaler</li>
           <li class="muted">Save past plans</li>
         </ul>
-        <button class="plan-cta" onclick="openAuth('signup')">Get Pro</button>
+        <button class="plan-cta primary" onclick="openAuth('signup')">Get Pro →</button>
       </div>
 
       <!-- FAMILY -->
-      <div class="price-card featured">
-        <div class="featured-badge">Most popular</div>
+      <div class="price-card">
         <div class="plan-name">Family</div>
         <div class="plan-price"><span class="price-amount" id="family-price">$9.99</span><span class="price-period">/mo</span></div>
         <div class="price-annual" id="family-annual">&nbsp;</div>
@@ -1165,8 +1165,9 @@ footer a{color:var(--terracotta);text-decoration:none}
 <script>
 // ── STATE ──
 let planData=null,recipeCache={},currentStep=1,currentRecipeName='',currentRecipeServings=2,billingAnnual=false;
-let userState={loggedIn:false,name:'',email:'',avatar:'👤'};
+let userState={loggedIn:false,name:'',email:'',avatar:'👤',plan:'free'};
 let savedRecipes=JSON.parse(localStorage.getItem('cookly_recipes')||'[]');
+const OWNER_EMAIL='cashmuir04@gmail.com';
 
 const loadingMessages=['Balancing nutrition, flavour & your schedule...','Sourcing seasonal ingredients...','Cross-referencing your dietary needs...','Writing out the shopping list...','Adding finishing touches...'];
 
@@ -1225,7 +1226,8 @@ function socialLogin(provider){
   showToast('Signed in with '+provider.charAt(0).toUpperCase()+provider.slice(1)+'!');
 }
 function loginUser(name,email,avatar){
-  userState={loggedIn:true,name,email,avatar};
+  const plan=email===OWNER_EMAIL?'max':'trial';
+  userState={loggedIn:true,name,email,avatar,plan};
   document.getElementById('navGuest').style.display='none';
   document.getElementById('navUser').style.display='flex';
   document.getElementById('navAvatar').textContent=avatar;
@@ -1233,7 +1235,12 @@ function loginUser(name,email,avatar){
   document.getElementById('profileEmail').textContent=email;
   document.getElementById('pFirstName').value=name;
   document.getElementById('pEmail').value=email;
-  showToast('Welcome, '+name+'! 👋');
+  if(plan==='max'){
+    document.getElementById('upgradeBtn').style.display='none';
+    showToast('Welcome back, '+name+'! ⭐ Max access active');
+  } else {
+    showToast('Welcome, '+name+'! Your 2-month free trial has started 🎉');
+  }
 }
 
 // ── PROFILE ──
@@ -1283,8 +1290,8 @@ function toggleBilling(){
   document.getElementById('lbl-yr').classList.toggle('on',billingAnnual);
   document.getElementById('basic-price').textContent=billingAnnual?'$1.29':'$1.99';
   document.getElementById('basic-annual').textContent=billingAnnual?'billed $15.50/year':'';
-  document.getElementById('pro-price').textContent=billingAnnual?'$3.25':'$4.99';
-  document.getElementById('pro-annual').textContent=billingAnnual?'billed $39/year':'';
+  document.getElementById('pro-price').textContent=billingAnnual?'$5.19':'$7.99';
+  document.getElementById('pro-annual').textContent=billingAnnual?'billed $62/year':'';
   document.getElementById('family-price').textContent=billingAnnual?'$6.50':'$9.99';
   document.getElementById('family-annual').textContent=billingAnnual?'billed $78/year':'';
   document.getElementById('max-price').textContent=billingAnnual?'$8.45':'$12.99';
