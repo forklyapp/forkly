@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -496,7 +495,14 @@ footer a{color:var(--terracotta);text-decoration:none}
 
   <footer>
     <div class="footer-logo">Pant<em>reo</em></div>
-    <p>Built with ♥ using the <a href="https://anthropic.com" target="_blank">Anthropic API</a></p>
+    <div style="display:flex;justify-content:center;gap:1.5rem;margin:.75rem 0;flex-wrap:wrap">
+      <a href="mailto:pantreo.support@gmail.com">Support</a>
+      <a onclick="showPage('pricing',null)" style="cursor:pointer">Pricing</a>
+      <a onclick="showPage('referral',null)" style="cursor:pointer">Refer a friend</a>
+      <a href="mailto:pantreo.support@gmail.com">Contact us</a>
+    </div>
+    <p>Questions? Email us at <a href="mailto:pantreo.support@gmail.com">pantreo.support@gmail.com</a></p>
+    <p style="margin-top:.4rem">Built with ♥ using the <a href="https://anthropic.com" target="_blank">Anthropic API</a></p>
   </footer>
 </div>
 
@@ -914,7 +920,7 @@ footer a{color:var(--terracotta);text-decoration:none}
           <li class="muted">Nutrition info</li>
           <li class="muted">All cuisine styles</li>
         </ul>
-        <button class="plan-cta" onclick="openAuth('signup')">Get Basic</button>
+        <button class="plan-cta" onclick="window.open('https://buy.stripe.com/14A9AT0mkb7G9iRdcIaIM04','_blank')">Get Basic</button>
       </div>
 
       <!-- PRO -->
@@ -936,7 +942,7 @@ footer a{color:var(--terracotta);text-decoration:none}
           <li class="muted">Servings scaler</li>
           <li class="muted">Save past plans</li>
         </ul>
-        <button class="plan-cta primary" onclick="openAuth('signup')">Get Pro →</button>
+        <button class="plan-cta primary" onclick="window.open('https://buy.stripe.com/7sY00j6KIa3CfHf2y4aIM05','_blank')">Get Pro →</button>
       </div>
 
       <!-- FAMILY -->
@@ -956,7 +962,7 @@ footer a{color:var(--terracotta);text-decoration:none}
           <li class="muted">Pantry mode</li>
           <li class="muted">Save past plans</li>
         </ul>
-        <button class="plan-cta primary" onclick="openAuth('signup')">Get Family →</button>
+        <button class="plan-cta primary" onclick="window.open('https://buy.stripe.com/eVq3cvb0YfnWcv3a0waIM06','_blank')">Get Family →</button>
       </div>
 
       <!-- MAX -->
@@ -977,7 +983,7 @@ footer a{color:var(--terracotta);text-decoration:none}
           <li>Macro & calorie targets</li>
           <li>Priority support</li>
         </ul>
-        <button class="plan-cta" onclick="openAuth('signup')" style="background:var(--gold);color:#fff;border-color:var(--gold)">Get Max ⭐</button>
+        <button class="plan-cta" onclick="window.open('https://buy.stripe.com/9B66oH7OM1x61Qp1u0aIM07','_blank')" style="background:var(--gold);color:#fff;border-color:var(--gold)">Get Max ⭐</button>
       </div>
     </div>
 
@@ -987,6 +993,7 @@ footer a{color:var(--terracotta);text-decoration:none}
       <div class="faq-item"><div class="faq-q">Do I need an Anthropic API key?</div><div class="faq-a">Nope — on all paid plans Pantreo handles the AI behind the scenes. No API keys, no extra costs, no technical setup.</div></div>
       <div class="faq-item"><div class="faq-q">How is Pantreo different from Mealime or PlateJoy?</div><div class="faq-a">They use fixed recipe databases — you'll eventually see repeats. Pantreo's AI generates a completely unique plan every time, for any dietary combo, at a lower price than both.</div></div>
       <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes — no contracts, no hassle. Cancel from your account settings and keep access until the end of your billing period.</div></div>
+      <div class="faq-item"><div class="faq-q">How do I get support?</div><div class="faq-a">Email us anytime at <a href="mailto:pantreo.support@gmail.com" style="color:var(--terracotta)">pantreo.support@gmail.com</a> — we typically respond within 24 hours. Max plan users get priority responses.</div></div>
       <div class="faq-item"><div class="faq-q">What's the annual discount?</div><div class="faq-a">Pay yearly and save 35% across all plans. Basic drops to $1.29/mo, Pro to $3.25/mo, Family to $6.50/mo, and Max to $8.45/mo.</div></div>
     </div>
   </div>
