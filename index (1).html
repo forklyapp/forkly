@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookly — AI Meal Planner</title>
+<meta name="description" content="Your personal AI chef plans the week — you just cook it.">
+<meta property="og:title" content="Cookly — AI Meal Planner">
+<meta property="og:description" content="Your personal AI chef plans the week — you just cook it.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF7F2;--parchment:#F0EBE0;--ink:#1C1814;--ink-soft:#4A4540;--ink-muted:#8A8278;
+  --sage:#6B7F5E;--terracotta:#C4623A;--gold:#B8922A;
+  --border:rgba(28,24,20,0.12);--border-strong:rgba(28,24,20,0.22);
+  --nav-h:58px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;line-height:1.6;padding-top:var(--nav-h)}
+
+/* ── NAV ── */
+.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(250,247,242,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:200;display:flex;align-items:center;padding:0 2rem;gap:1.5rem}
+.logo{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:400;cursor:pointer;flex-shrink:0;text-decoration:none;color:var(--ink)}
+.logo em{font-style:italic;color:var(--terracotta)}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1}
+.nav-link{padding:.45rem .9rem;font-size:13px;font-weight:500;color:var(--ink-soft);background:transparent;border:none;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-decoration:none}
+.nav-link:hover{background:var(--parchment);color:var(--ink)}
+.nav-link.active{color:var(--ink);background:var(--parchment)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.btn-login{padding:.45rem 1rem;font-size:13px;font-weight:500;color:var(--ink-soft);background:transparent;border:1px solid var(--border-strong);border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-login:hover{background:var(--parchment)}
+.btn-getpro{padding:.45rem 1.1rem;font-size:13px;font-weight:500;color:#fff;background:var(--terracotta);border:none;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-getpro:hover{background:#b0572f}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--parchment);border:2px solid var(--border-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--ink-soft);overflow:hidden;transition:border-color .15s}
+.nav-avatar:hover{border-color:var(--terracotta)}
+.nav-avatar img{width:100%;height:100%;object-fit:cover}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{width:20px;height:2px;background:var(--ink);border-radius:2px;display:block;transition:all .2s}
+.mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:var(--cream);border-bottom:1px solid var(--border);padding:1rem 2rem;z-index:199;flex-direction:column;gap:4px}
+.mobile-menu.open{display:flex}
+.mobile-link{padding:.6rem .85rem;font-size:14px;font-weight:500;color:var(--ink-soft);border-radius:7px;cursor:pointer;transition:background .15s}
+.mobile-link:hover{background:var(--parchment)}
+
+/* ── PAGES ── */
+.page{display:none;min-height:calc(100vh - var(--nav-h))}
+.page.active{display:block}
+.container{max-width:920px;margin:0 auto;padding:0 1.5rem 4rem}
+.container-sm{max-width:640px;margin:0 auto;padding:0 1.5rem 4rem}
+
+/* ── HOME PAGE ── */
+.hero{text-align:center;padding:5rem 1.5rem 4rem;max-width:720px;margin:0 auto}
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--terracotta);margin-bottom:1rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:3.4rem;font-weight:400;line-height:1.1;margin-bottom:1.25rem}
+.hero h1 em{font-style:italic;color:var(--terracotta)}
+.hero-sub{font-size:16px;color:var(--ink-muted);font-weight:300;margin-bottom:2.5rem;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto}
+.hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:.8rem 1.8rem;background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:#2E2A25}
+.btn-outline{padding:.8rem 1.8rem;background:transparent;color:var(--ink);border:1px solid var(--border-strong);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-outline:hover{background:var(--parchment)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;max-width:920px;margin:0 auto;padding:0 1.5rem 5rem}
+.feat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.75rem}
+.feat-icon{font-size:1.75rem;margin-bottom:1rem;display:block}
+.feat-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;margin-bottom:.5rem}
+.feat-card p{font-size:13px;color:var(--ink-muted);line-height:1.65}
+.home-divider{border:none;border-top:1px solid var(--border);max-width:920px;margin:0 auto}
+.how-section{max-width:920px;margin:0 auto;padding:4rem 1.5rem}
+.section-label{font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.75rem}
+.section-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:3rem}
+.steps-list{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.step{display:flex;flex-direction:column;gap:.75rem}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--parchment);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--terracotta)}
+.step h4{font-size:15px;font-weight:500;color:var(--ink)}
+.step p{font-size:13px;color:var(--ink-muted);line-height:1.65}
+.home-cta-band{background:var(--parchment);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4rem 1.5rem;text-align:center;margin-bottom:0}
+.home-cta-band h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:.75rem}
+.home-cta-band h2 em{font-style:italic;color:var(--terracotta)}
+.home-cta-band p{font-size:14px;color:var(--ink-muted);margin-bottom:1.75rem}
+
+/* ── API BANNER ── */
+.api-banner{background:#fff8ed;border:1px solid #f0c97a;border-radius:10px;padding:1rem 1.25rem;margin-bottom:2rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.api-banner-text{flex:1;min-width:200px}
+.api-banner-text strong{font-size:13px;font-weight:500;color:var(--gold);display:block;margin-bottom:2px}
+.api-banner-text span{font-size:12px;color:var(--ink-muted)}
+.api-banner input{flex:2;min-width:200px;padding:.55rem .85rem;border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none}
+.api-banner input:focus{border-color:var(--terracotta)}
+.api-save-btn{padding:.55rem 1rem;background:var(--ink);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.api-save-btn:hover{background:#2E2A25}
+.api-key-saved{font-size:12px;color:var(--sage);font-weight:500;display:none}
+
+/* ── PLANNER ── */
+.page-header{padding:2.5rem 0 2rem;border-bottom:1px solid var(--border);margin-bottom:2.5rem}
+.page-header h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;margin-bottom:.3rem}
+.page-header h2 em{font-style:italic;color:var(--terracotta)}
+.page-header p{font-size:14px;color:var(--ink-muted);font-weight:300}
+.steps-bar{display:flex;margin-bottom:2.5rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--parchment)}
+.step-tab{flex:1;padding:.8rem 1rem;text-align:center;font-size:13px;font-weight:500;color:var(--ink-muted);cursor:default;border-right:1px solid var(--border);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.step-tab:last-child{border-right:none}
+.step-tab.active{background:var(--ink);color:#fff}
+.step-tab.done{color:var(--sage);cursor:pointer}
+.step-dot{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-tab.active .step-dot{background:var(--terracotta);border-color:var(--terracotta);color:#fff}
+.step-tab.done .step-dot{background:var(--sage);border-color:var(--sage);color:#fff}
+.section{display:none}.section.active{display:block}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
+.form-full{grid-column:1/-1}
+.field label{display:block;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.4rem}
+.field select,.field input,.field textarea{width:100%;padding:.65rem .85rem;border:1px solid var(--border-strong);border-radius:7px;background:#fff;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .15s}
+.field select:focus,.field input:focus,.field textarea:focus{border-color:var(--terracotta)}
+.field textarea{resize:vertical;min-height:80px}
+.tag-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:.4rem}
+.tag-cb{display:none}
+.tag-label{padding:5px 13px;border:1px solid var(--border-strong);border-radius:20px;font-size:13px;color:var(--ink-soft);cursor:pointer;transition:all .15s;background:#fff;user-select:none}
+.tag-cb:checked+.tag-label{background:var(--terracotta);border-color:var(--terracotta);color:#fff}
+.btn-generate{width:100%;padding:1rem;background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-generate:hover{background:#2E2A25}
+.btn-secondary{padding:.6rem 1.2rem;background:transparent;color:var(--ink-soft);border:1px solid var(--border-strong);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn-secondary:hover{background:var(--parchment);border-color:var(--ink-muted)}
+.loading-state{text-align:center;padding:4rem 2rem;display:none}
+.loading-state.active{display:block}
+.chef-hat{font-size:3rem;animation:bounce 1.2s ease-in-out infinite;display:block;margin-bottom:1rem}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.loading-text{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--ink-soft);font-style:italic}
+.loading-sub{font-size:13px;color:var(--ink-muted);margin-top:.5rem}
+.output-actions{display:flex;gap:10px;margin-bottom:2rem;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.output-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400}
+.nutrition-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem}
+.nut-card{background:var(--parchment);border-radius:8px;padding:.85rem;text-align:center}
+.nut-value{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;line-height:1;margin-bottom:3px}
+.nut-label{font-size:11px;color:var(--ink-muted);letter-spacing:.05em}
+.output-tabs{display:flex;border:1px solid var(--border-strong);border-radius:8px;overflow:hidden;margin-bottom:2rem;width:fit-content}
+.out-tab{padding:.55rem 1.1rem;font-size:13px;font-weight:500;color:var(--ink-muted);cursor:pointer;border-right:1px solid var(--border-strong);transition:all .15s;background:#fff}
+.out-tab:last-child{border-right:none}
+.out-tab.active{background:var(--ink);color:#fff}
+.out-panel{display:none}.out-panel.active{display:block}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:2.5rem}
+.day-card{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.day-header{background:var(--parchment);padding:6px 8px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.day-meals{padding:8px}
+.meal-slot{padding:6px 8px;border-radius:6px;margin-bottom:5px;cursor:pointer;transition:background .15s}
+.meal-slot:last-child{margin-bottom:0}
+.meal-slot:hover{background:var(--cream)}
+.meal-type{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.meal-type.breakfast{color:var(--gold)}.meal-type.lunch{color:var(--sage)}.meal-type.dinner{color:var(--terracotta)}
+.meal-name{font-size:11px;color:var(--ink);line-height:1.3}
+.regen-btn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border-strong);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .15s;flex-shrink:0}
+.regen-btn:hover{background:var(--terracotta);border-color:var(--terracotta);color:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+.regen-btn.loading{opacity:.5;cursor:not-allowed;animation:spin .8s linear infinite}
+.grocery-section-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.grocery-categories{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.grocery-cat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem}
+.grocery-cat h4{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.grocery-item{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;color:var(--ink-soft);cursor:pointer}
+.grocery-item.checked{color:var(--ink-muted);text-decoration:line-through}
+.grocery-check{width:16px;height:16px;border:1.5px solid var(--border-strong);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s}
+.grocery-item.checked .grocery-check{background:var(--sage);border-color:var(--sage);color:#fff}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,24,20,0.6);z-index:300;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.active{display:flex}
+.modal{background:var(--cream);border-radius:14px;max-width:540px;width:100%;max-height:85vh;overflow-y:auto;padding:2rem;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border:1px solid var(--border-strong);border-radius:50%;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-soft);transition:all .15s}
+.modal-close:hover{background:var(--parchment)}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:400;margin-bottom:.35rem;padding-right:2rem}
+.modal-meta{font-size:12px;color:var(--ink-muted);margin-bottom:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.scaler-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding:.75rem 1rem;background:var(--parchment);border-radius:8px}
+.scaler-label{font-size:12px;font-weight:500;color:var(--ink-soft);flex:1}
+.scaler-controls{display:flex;align-items:center;gap:8px}
+.scaler-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border-strong);background:#fff;cursor:pointer;font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;transition:all .15s;color:var(--ink);line-height:1}
+.scaler-btn:hover{background:var(--terracotta);border-color:var(--terracotta);color:#fff}
+.scaler-val{font-size:15px;font-weight:500;min-width:80px;text-align:center}
+.modal-body{font-size:14px;color:var(--ink-soft);line-height:1.75;white-space:pre-wrap}
+
+/* ── AUTH MODAL ── */
+.auth-modal{background:var(--cream);border-radius:14px;max-width:420px;width:100%;padding:2.25rem;position:relative}
+.auth-tabs{display:flex;border:1px solid var(--border-strong);border-radius:8px;overflow:hidden;margin-bottom:1.75rem}
+.auth-tab{flex:1;padding:.55rem;text-align:center;font-size:13px;font-weight:500;color:var(--ink-muted);cursor:pointer;background:#fff;border-right:1px solid var(--border-strong);transition:all .15s}
+.auth-tab:last-child{border-right:none}
+.auth-tab.active{background:var(--ink);color:#fff}
+.auth-form{display:none}.auth-form.active{display:block}
+.auth-field{margin-bottom:1rem}
+.auth-field label{display:block;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.4rem}
+.auth-field input{width:100%;padding:.65rem .85rem;border:1px solid var(--border-strong);border-radius:7px;background:#fff;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .15s}
+.auth-field input:focus{border-color:var(--terracotta)}
+.btn-auth{width:100%;padding:.85rem;background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-top:.5rem;transition:all .2s}
+.btn-auth:hover{background:#2E2A25}
+.auth-divider{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;font-size:12px;color:var(--ink-muted)}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;border-top:1px solid var(--border)}
+.social-btns{display:flex;gap:8px}
+.btn-social{flex:1;padding:.65rem;border:1px solid var(--border-strong);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .15s;color:var(--ink)}
+.btn-social:hover{background:var(--parchment)}
+.auth-footer{text-align:center;font-size:12px;color:var(--ink-muted);margin-top:1.25rem}
+.auth-footer a{color:var(--terracotta);cursor:pointer;text-decoration:none}
+
+/* ── RECIPES PAGE ── */
+.recipes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2rem}
+.recipe-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.recipe-card:hover{border-color:var(--terracotta)}
+.recipe-thumb{height:120px;background:var(--parchment);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.recipe-info{padding:1rem}
+.recipe-tag{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.35rem}
+.recipe-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.25rem;line-height:1.3}
+.recipe-meta{font-size:12px;color:var(--ink-muted)}
+.recipes-empty{text-align:center;padding:5rem 2rem;color:var(--ink-muted)}
+.recipes-empty .empty-icon{font-size:3rem;margin-bottom:1rem;display:block}
+.recipes-empty p{font-size:14px;margin-bottom:1.5rem}
+.search-bar{position:relative;margin-bottom:.5rem}
+.search-bar input{width:100%;padding:.7rem 1rem .7rem 2.5rem;border:1px solid var(--border-strong);border-radius:8px;background:#fff;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none}
+.search-bar input:focus{border-color:var(--terracotta)}
+.search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--ink-muted);font-size:14px;pointer-events:none}
+
+/* ── PROFILE PAGE ── */
+.profile-layout{display:grid;grid-template-columns:220px 1fr;gap:2rem;padding-top:2rem}
+.profile-sidebar{display:flex;flex-direction:column;gap:6px}
+.profile-nav-item{padding:.6rem .9rem;border-radius:8px;font-size:13px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
+.profile-nav-item:hover{background:var(--parchment)}
+.profile-nav-item.active{background:var(--ink);color:#fff}
+.profile-nav-item .pni-icon{font-size:15px}
+.profile-panel{display:none}.profile-panel.active{display:block}
+.profile-avatar-section{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;padding:1.5rem;background:#fff;border:1px solid var(--border);border-radius:12px}
+.big-avatar{width:80px;height:80px;border-radius:50%;background:var(--parchment);border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;overflow:hidden;flex-shrink:0;transition:border-color .15s;position:relative}
+.big-avatar:hover{border-color:var(--terracotta)}
+.big-avatar img{width:100%;height:100%;object-fit:cover}
+.avatar-overlay{position:absolute;inset:0;background:rgba(28,24,20,0.45);display:none;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:500;border-radius:50%}
+.big-avatar:hover .avatar-overlay{display:flex}
+.avatar-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:.75rem}
+.avatar-preset{width:40px;height:40px;border-radius:50%;background:var(--parchment);border:2px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:all .15s}
+.avatar-preset:hover,.avatar-preset.selected{border-color:var(--terracotta)}
+.profile-section{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}
+.profile-section h3{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:1.25rem;padding-bottom:.6rem;border-bottom:1px solid var(--border)}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.profile-field label{display:block;font-size:12px;font-weight:500;color:var(--ink-soft);margin-bottom:.35rem;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+.profile-field input,.profile-field select{width:100%;padding:.6rem .8rem;border:1px solid var(--border-strong);border-radius:7px;background:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .15s}
+.profile-field input:focus,.profile-field select:focus{border-color:var(--terracotta);background:#fff}
+.unit-toggle{display:flex;border:1px solid var(--border-strong);border-radius:7px;overflow:hidden}
+.unit-opt{flex:1;padding:.55rem;text-align:center;font-size:12px;font-weight:500;color:var(--ink-muted);cursor:pointer;background:#fff;border-right:1px solid var(--border-strong);transition:all .15s}
+.unit-opt:last-child{border-right:none}
+.unit-opt.active{background:var(--ink);color:#fff}
+.goals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.goal-card{border:1px solid var(--border-strong);border-radius:10px;padding:.9rem;cursor:pointer;transition:all .15s;background:#fff;text-align:center}
+.goal-card:hover{border-color:var(--terracotta)}
+.goal-card.selected{border-color:var(--terracotta);background:var(--terracotta);color:#fff}
+.goal-card .goal-icon{font-size:1.4rem;margin-bottom:.4rem;display:block}
+.goal-card .goal-name{font-size:12px;font-weight:500;line-height:1.3}
+.goal-card.selected .goal-name{color:#fff}
+.save-bar{display:flex;justify-content:flex-end;gap:8px;padding-top:1rem}
+.btn-save{padding:.65rem 1.5rem;background:var(--terracotta);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn-save:hover{background:#b0572f}
+
+/* ── PRICING PAGE ── */
+.pricing-header{text-align:center;padding:3rem 0 2.5rem}
+.pricing-header h2{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:400;margin-bottom:.5rem}
+.pricing-header h2 em{font-style:italic;color:var(--terracotta)}
+.pricing-header p{font-size:15px;color:var(--ink-muted);font-weight:300}
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2.5rem}
+.billing-toggle span{font-size:13px;font-weight:500;color:var(--ink-muted)}
+.billing-toggle span.on{color:var(--ink)}
+.toggle-track{width:42px;height:24px;background:var(--ink);border-radius:12px;cursor:pointer;position:relative;transition:background .2s}
+.toggle-thumb{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform .2s}
+.toggle-track.annual .toggle-thumb{transform:translateX(18px)}
+.save-badge{background:var(--sage);color:#fff;font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px;letter-spacing:.05em}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem}
+.price-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;display:flex;flex-direction:column;position:relative}
+.price-card.featured{border:2px solid var(--terracotta)}
+.featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--terracotta);color:#fff;font-size:11px;font-weight:500;padding:3px 14px;border-radius:10px;white-space:nowrap;letter-spacing:.05em}
+.plan-name{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:.75rem}
+.plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:.25rem}
+.price-amount{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:600;color:var(--ink);line-height:1}
+.price-period{font-size:13px;color:var(--ink-muted)}
+.price-annual{font-size:12px;color:var(--sage);margin-bottom:1.25rem;min-height:18px}
+.plan-divider{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+.plan-features{list-style:none;flex:1;margin-bottom:1.5rem}
+.plan-features li{font-size:13px;color:var(--ink-soft);padding:4px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.plan-features li::before{content:'✓';color:var(--sage);font-weight:600;font-size:12px;margin-top:1px;flex-shrink:0}
+.plan-features li.muted{color:var(--ink-muted)}
+.plan-features li.muted::before{content:'–';color:var(--ink-muted);font-weight:400}
+.plan-cta{width:100%;padding:.75rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid var(--border-strong);background:transparent;color:var(--ink)}
+.plan-cta:hover{background:var(--parchment)}
+.plan-cta.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.plan-cta.primary:hover{background:#2E2A25}
+.pricing-faq{max-width:620px;margin:0 auto 3rem}
+.pricing-faq h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;margin-bottom:1.5rem;text-align:center}
+.faq-item{border-top:1px solid var(--border);padding:1rem 0}
+.faq-item:last-child{border-bottom:1px solid var(--border)}
+.faq-q{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.4rem}
+.faq-a{font-size:13px;color:var(--ink-muted);line-height:1.65}
+
+/* ── FOOTER ── */
+footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.5rem}
+.footer-logo em{font-style:italic;color:var(--terracotta)}
+footer p{font-size:12px;color:var(--ink-muted)}
+footer a{color:var(--terracotta);text-decoration:none}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:.6rem 1.4rem;border-radius:20px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .topnav{padding:0 1rem}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .features-grid,.steps-list,.pricing-grid{grid-template-columns:1fr}
+  .week-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid,.grocery-categories,.profile-grid,.recipes-grid{grid-template-columns:1fr}
+  .nutrition-strip{grid-template-columns:repeat(2,1fr)}
+  .profile-layout{grid-template-columns:1fr}
+  .profile-sidebar{flex-direction:row;flex-wrap:wrap}
+  .goals-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<nav class="topnav">
+  <a class="logo" onclick="showPage('home')" href="#">Cook<em>ly</em></a>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('home',this)">Home</button>
+    <button class="nav-link" onclick="showPage('planner',this)">Planner</button>
+    <button class="nav-link" onclick="showPage('recipes',this)">Recipes</button>
+    <button class="nav-link" onclick="showPage('pricing',this)">Pricing</button>
+    <button class="nav-link" onclick="showPage('referral',this)" style="color:var(--terracotta)">Free Month 🎁</button>
+  </div>
+  <div class="nav-right">
+    <div id="navGuest">
+      <button class="btn-login" onclick="openAuth('login')">Log in</button>
+      <button class="btn-getpro" onclick="openAuth('signup')">Get started</button>
+    </div>
+    <div id="navUser" style="display:none;align-items:center;gap:8px">
+      <button class="btn-getpro" onclick="showPage('pricing',null)" id="upgradeBtn">Get Pro →</button>
+      <div class="nav-avatar" onclick="showPage('profile',null)" id="navAvatar" title="My profile">👤</div>
+    </div>
+  </div>
+  <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-link" onclick="showPage('home');toggleMobile()">Home</div>
+  <div class="mobile-link" onclick="showPage('planner');toggleMobile()">Planner</div>
+  <div class="mobile-link" onclick="showPage('recipes');toggleMobile()">Recipes</div>
+  <div class="mobile-link" onclick="showPage('pricing');toggleMobile()">Pricing</div>
+  <div class="mobile-link" onclick="showPage('referral');toggleMobile()" style="color:var(--terracotta)">Free Month 🎁</div>
+  <div class="mobile-link" onclick="openAuth('login');toggleMobile()">Log in</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">AI-Powered Meal Planning</div>
+    <h1>Your week, <em>planned.</em><br>Your groceries, <em>sorted.</em></h1>
+    <p class="hero-sub">Tell Cookly what you like, how long you have, and how many you're feeding. Get a full week of meals and a ready-to-shop grocery list in seconds.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="showPage('planner',null)">✦ Start Your 2-Month Free Trial</button>
+      <button class="btn-outline" onclick="showPage('pricing',null)">See pricing</button>
+    </div>
+    <p style="font-size:12px;color:var(--ink-muted);margin-top:.85rem">No credit card required · Full Max access for 2 months</p>
+  </div>
+
+  <!-- FOOD PHOTO GRID -->
+  <div style="max-width:920px;margin:0 auto;padding:0 1.5rem 4rem">
+    <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:220px 220px;gap:12px">
+      <div style="grid-row:1/3;border-radius:16px;overflow:hidden;position:relative">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Delicious dinner plate" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(28,24,20,0.7));padding:1.5rem;color:#fff">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:.3rem">AI Generated Plan</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400">Mediterranean Week</div>
+        </div>
+      </div>
+      <div style="border-radius:16px;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80" alt="Healthy bowl" style="width:100%;height:100%;object-fit:cover">
+      </div>
+      <div style="border-radius:16px;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&q=80" alt="Pancakes breakfast" style="width:100%;height:100%;object-fit:cover">
+      </div>
+      <div style="border-radius:16px;overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80" alt="Fresh salad" style="width:100%;height:100%;object-fit:cover">
+      </div>
+      <div style="border-radius:16px;overflow:hidden;position:relative">
+        <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&q=80" alt="Pasta dinner" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;inset:0;background:rgba(196,98,58,0.75);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:#fff">∞</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.9);letter-spacing:.08em;text-transform:uppercase">Unique recipes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features-grid">
+    <div class="feat-card">
+      <div style="width:44px;height:44px;background:var(--terracotta-light,#FAF0EB);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem">🧠</div>
+      <h3>Infinite variety</h3>
+      <p>No recipe database. No repeats. Cookly's AI generates a completely fresh, personalized plan every single time — there are literally infinite combinations.</p>
+    </div>
+    <div class="feat-card">
+      <div style="width:44px;height:44px;background:#EBF0E6;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem">🛒</div>
+      <h3>Grocery list, done</h3>
+      <p>Every plan comes with an organized, category-sorted shopping list. Check items off as you shop, or copy the whole thing in one tap.</p>
+    </div>
+    <div class="feat-card">
+      <div style="width:44px;height:44px;background:#FBF5E6;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem">🔄</div>
+      <h3>Hate Tuesday? Redo it</h3>
+      <p>Regenerate any single day without touching the rest of your plan. Tweak until it's perfect — your grocery list updates automatically.</p>
+    </div>
+  </div>
+
+  <!-- SOCIAL PROOF STRIP -->
+  <div style="background:var(--parchment);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 1.5rem;margin-bottom:0">
+    <div style="max-width:920px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;text-align:center">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;color:var(--terracotta);line-height:1">∞</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:.35rem">Unique meal combinations</div>
+      </div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;color:var(--terracotta);line-height:1">7</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:.35rem">Cuisine styles + Chef's Choice</div>
+      </div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;color:var(--terracotta);line-height:1">2mo</div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:.35rem">Free trial, no card needed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOD PHOTO ROW -->
+  <div style="max-width:920px;margin:0 auto;padding:3rem 1.5rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+      <div>
+        <div class="section-label">Chef's Choice mode</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:400;margin-bottom:1rem;line-height:1.2">A different cuisine <em style="font-style:italic;color:var(--terracotta)">every day</em></div>
+        <p style="font-size:14px;color:var(--ink-muted);line-height:1.7;margin-bottom:1.25rem">Monday Thai. Tuesday Italian. Wednesday Mexican. No more eating the same flavours all week — Chef's Choice picks a different world cuisine for every day automatically.</p>
+        <button class="btn-primary" onclick="showPage('planner',null)" style="font-size:14px;padding:.7rem 1.4rem">Try it now →</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;height:280px">
+        <div style="border-radius:12px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&q=80" alt="Thai food" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div style="border-radius:12px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=300&q=80" alt="Italian pasta" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div style="border-radius:12px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=300&q=80" alt="Mexican tacos" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div style="border-radius:12px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Indian curry" style="width:100%;height:100%;object-fit:cover">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <hr class="home-divider">
+  <div class="how-section">
+    <div class="section-label">How it works</div>
+    <div class="section-title">Three steps to a full week</div>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Set your preferences</h4>
+        <p>Tell us how many people, which days, what meals, your dietary needs, how long you have to cook, and your budget.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Generate your plan</h4>
+        <p>Our AI builds a completely unique meal plan with recipes, nutrition info, and cook times — tailored exactly to you.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Shop & cook</h4>
+        <p>Take your organized grocery list to the store, check items off as you go, and cook with confidence all week.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="home-cta-band">
+    <h2>Ready to stop asking <em>"what's for dinner?"</em></h2>
+    <p style="margin-bottom:.5rem">2 months free. Full Max access. No credit card.</p>
+    <p style="font-size:12px;color:var(--ink-muted);margin-bottom:1.75rem">After your trial, plans start at just $1.99/mo.</p>
+    <button class="btn-primary" onclick="showPage('planner',null)">✦ Start My Free Trial</button>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Cook<em>ly</em></div>
+    <p>Built with ♥ using the <a href="https://anthropic.com" target="_blank">Anthropic API</a></p>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     PLANNER PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-planner">
+  <div class="container">
+    <div class="page-header">
+      <h2>Meal <em>Planner</em></h2>
+      <p>Fill in your preferences below and let the AI do the rest.</p>
+    </div>
+
+    <div class="api-banner" id="apiBanner">
+      <div class="api-banner-text">
+        <strong>🔑 Anthropic API Key Required</strong>
+        <span>Get yours free at <a href="https://console.anthropic.com" target="_blank" style="color:var(--terracotta)">console.anthropic.com</a> — stored only in your browser.</span>
+      </div>
+      <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off">
+      <button class="api-save-btn" onclick="saveApiKey()">Save Key</button>
+      <span class="api-key-saved" id="apiKeySaved">✓ Key saved</span>
+    </div>
+
+    <div class="steps-bar">
+      <div class="step-tab active" id="tab1" onclick="goToStep(1)"><span class="step-dot">1</span><span> Preferences</span></div>
+      <div class="step-tab" id="tab2" onclick="goToStep(2)"><span class="step-dot">2</span><span> Your Plan</span></div>
+      <div class="step-tab" id="tab3" onclick="goToStep(3)"><span class="step-dot">3</span><span> Grocery List</span></div>
+    </div>
+
+    <div class="section active" id="section1">
+      <div class="form-grid">
+        <div class="field">
+          <label>People to feed</label>
+          <select id="servings">
+            <option>1 person</option><option selected>2 people</option>
+            <option>3 people</option><option>4 people</option><option>5–6 people</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Days to plan</label>
+          <select id="days">
+            <option>1 day</option><option>2 days</option><option>3 days</option>
+            <option>4 days</option><option selected>5 days</option><option>6 days</option><option>7 days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Meals per day</label>
+          <select id="meals">
+            <option selected>Breakfast, Lunch & Dinner</option>
+            <option>Breakfast only</option><option>Lunch only</option><option>Dinner only</option>
+            <option>Breakfast & Lunch</option><option>Lunch & Dinner</option><option>Breakfast & Dinner</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Cuisine style</label>
+          <select id="cuisine">
+            <option>Chef's Choice (mixed cuisines)</option><option>Mediterranean</option>
+            <option>Asian-inspired</option><option>American comfort</option>
+            <option>Mexican / Latin</option><option>Italian</option><option>Middle Eastern</option>
+          </select>
+        </div>
+        <div class="field form-full">
+          <label>Dietary preferences</label>
+          <div class="tag-group">
+            <input type="checkbox" class="tag-cb" id="veg" value="vegetarian"><label class="tag-label" for="veg">Vegetarian</label>
+            <input type="checkbox" class="tag-cb" id="vegan" value="vegan"><label class="tag-label" for="vegan">Vegan</label>
+            <input type="checkbox" class="tag-cb" id="gf" value="gluten-free"><label class="tag-label" for="gf">Gluten-Free</label>
+            <input type="checkbox" class="tag-cb" id="df" value="dairy-free"><label class="tag-label" for="df">Dairy-Free</label>
+            <input type="checkbox" class="tag-cb" id="keto" value="keto"><label class="tag-label" for="keto">Keto / Low-Carb</label>
+            <input type="checkbox" class="tag-cb" id="paleo" value="paleo"><label class="tag-label" for="paleo">Paleo</label>
+            <input type="checkbox" class="tag-cb" id="nut" value="nut-free"><label class="tag-label" for="nut">Nut-Free</label>
+            <input type="checkbox" class="tag-cb" id="halal" value="halal"><label class="tag-label" for="halal">Halal</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Max cook time per meal</label>
+          <select id="cooktime">
+            <option>15 minutes (quick)</option><option>30 minutes</option>
+            <option selected>45 minutes</option><option>1 hour or more</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Budget level</label>
+          <select id="budget">
+            <option>Budget-friendly</option><option selected>Moderate</option><option>Splurge-worthy</option>
+          </select>
+        </div>
+        <div class="field form-full">
+          <label>Anything else?</label>
+          <textarea id="notes" placeholder="e.g. No shellfish, love spicy food, trying to eat more protein..."></textarea>
+        </div>
+      </div>
+      <button class="btn-generate" onclick="generatePlan()">✦ Generate My Meal Plan</button>
+    </div>
+
+    <div class="loading-state" id="loadingState">
+      <span class="chef-hat">👨‍🍳</span>
+      <p class="loading-text">Your chef is crafting the perfect week...</p>
+      <p class="loading-sub" id="loadingMsg">Balancing nutrition, flavour, and your schedule</p>
+    </div>
+
+    <div class="section" id="section2">
+      <div class="output-actions">
+        <div class="output-title" id="planTitle">Your Week's Menu</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary" onclick="copyAll()">Copy list</button>
+          <button class="btn-secondary" onclick="goToStep(1)">← Edit</button>
+        </div>
+      </div>
+      <div class="nutrition-strip" id="nutritionStrip"></div>
+      <div class="output-tabs">
+        <div class="out-tab active" onclick="switchOutTab('plan',this)">Meal Plan</div>
+        <div class="out-tab" onclick="switchOutTab('grocery',this)">Grocery List</div>
+      </div>
+      <div class="out-panel active" id="outPlan">
+        <div class="week-grid" id="weekGrid"></div>
+      </div>
+      <div class="out-panel" id="outGrocery">
+        <div class="grocery-section-title">
+          <span>Shopping List</span>
+          <button class="btn-secondary" onclick="uncheckAll()">Uncheck all</button>
+        </div>
+        <div class="grocery-categories" id="groceryGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RECIPES PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-recipes">
+  <div class="container">
+    <div class="page-header">
+      <h2>My <em>Recipes</em></h2>
+      <p>Every recipe from your generated plans — saved and searchable.</p>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search recipes, ingredients..." oninput="filterRecipes(this.value)">
+    </div>
+    <div id="recipesContent">
+      <div class="recipes-empty">
+        <span class="empty-icon">🍳</span>
+        <p>No recipes yet — generate a meal plan and your recipes will appear here.</p>
+        <button class="btn-primary" onclick="showPage('planner',null)">✦ Generate a Plan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PROFILE PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-profile">
+  <div class="container">
+    <div class="page-header">
+      <h2>My <em>Profile</em></h2>
+      <p>Customize your preferences and Cookly will remember them.</p>
+    </div>
+    <div class="profile-layout">
+      <div class="profile-sidebar">
+        <div class="profile-nav-item active" onclick="switchProfilePanel('account',this)"><span class="pni-icon">👤</span> Account</div>
+        <div class="profile-nav-item" onclick="switchProfilePanel('body',this)"><span class="pni-icon">📏</span> Body & Health</div>
+        <div class="profile-nav-item" onclick="switchProfilePanel('goals',this)"><span class="pni-icon">🎯</span> Goals</div>
+        <div class="profile-nav-item" onclick="switchProfilePanel('food',this)"><span class="pni-icon">🥗</span> Food Preferences</div>
+        <div class="profile-nav-item" onclick="switchProfilePanel('billing',this)"><span class="pni-icon">💳</span> Billing</div>
+      </div>
+
+      <div style="flex:1">
+        <!-- ACCOUNT PANEL -->
+        <div class="profile-panel active" id="panel-account">
+          <div class="profile-avatar-section">
+            <div class="big-avatar" id="bigAvatar" onclick="document.getElementById('avatarUpload').click()">
+              <span id="avatarEmoji">👤</span>
+              <img id="avatarImg" style="display:none">
+              <div class="avatar-overlay">Change</div>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.25rem" id="profileName">Your Name</div>
+              <div style="font-size:13px;color:var(--ink-muted);margin-bottom:.75rem" id="profileEmail">your@email.com</div>
+              <input type="file" id="avatarUpload" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+              <div style="font-size:11px;color:var(--ink-muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;font-weight:500">Or pick an avatar</div>
+              <div class="avatar-presets">
+                <div class="avatar-preset selected" onclick="setAvatarEmoji('👨‍🍳',this)">👨‍🍳</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('👩‍🍳',this)">👩‍🍳</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('🧑‍🍳',this)">🧑‍🍳</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('🍴',this)">🍴</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('🥘',this)">🥘</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('🌮',this)">🌮</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('🥗',this)">🥗</div>
+                <div class="avatar-preset" onclick="setAvatarEmoji('🍜',this)">🍜</div>
+              </div>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Personal info</h3>
+            <div class="profile-grid">
+              <div class="profile-field"><label>First name</label><input type="text" id="pFirstName" placeholder="Jane"></div>
+              <div class="profile-field"><label>Last name</label><input type="text" id="pLastName" placeholder="Smith"></div>
+              <div class="profile-field"><label>Email</label><input type="email" id="pEmail" placeholder="jane@email.com"></div>
+              <div class="profile-field"><label>Household size</label>
+                <select id="pHousehold">
+                  <option>Just me</option><option selected>2 people</option>
+                  <option>3 people</option><option>4 people</option><option>5+ people</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Change password</h3>
+            <div class="profile-grid">
+              <div class="profile-field"><label>Current password</label><input type="password" placeholder="••••••••"></div>
+              <div class="profile-field"><label>New password</label><input type="password" placeholder="••••••••"></div>
+            </div>
+          </div>
+          <div class="save-bar">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-save" onclick="saveProfile()">Save changes</button>
+          </div>
+        </div>
+
+        <!-- BODY & HEALTH PANEL -->
+        <div class="profile-panel" id="panel-body">
+          <div class="profile-section">
+            <h3>Units</h3>
+            <div class="unit-toggle" id="unitToggle">
+              <div class="unit-opt active" onclick="setUnits('imperial',this)">Imperial (lbs, ft/in)</div>
+              <div class="unit-opt" onclick="setUnits('metric',this)">Metric (kg, cm)</div>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Measurements</h3>
+            <div class="profile-grid">
+              <div class="profile-field"><label>Age</label><input type="number" id="pAge" placeholder="30" min="13" max="100"></div>
+              <div class="profile-field">
+                <label>Biological sex</label>
+                <select id="pSex"><option>Prefer not to say</option><option>Male</option><option>Female</option></select>
+              </div>
+              <div class="profile-field" id="heightField">
+                <label id="heightLabel">Height (ft / in)</label>
+                <div style="display:flex;gap:8px">
+                  <input type="number" id="pHeightFt" placeholder="5" min="3" max="8" style="flex:1">
+                  <input type="number" id="pHeightIn" placeholder="8" min="0" max="11" style="flex:1">
+                </div>
+              </div>
+              <div class="profile-field">
+                <label id="weightLabel">Weight (lbs)</label>
+                <input type="number" id="pWeight" placeholder="150">
+              </div>
+            </div>
+          </div>
+          <div class="save-bar">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-save" onclick="saveProfile()">Save changes</button>
+          </div>
+        </div>
+
+        <!-- GOALS PANEL -->
+        <div class="profile-panel" id="panel-goals">
+          <div class="profile-section">
+            <h3>What are you working towards?</h3>
+            <div class="goals-grid">
+              <div class="goal-card selected" onclick="toggleGoal(this)">
+                <span class="goal-icon">⚖️</span>
+                <div class="goal-name">Lose weight</div>
+              </div>
+              <div class="goal-card" onclick="toggleGoal(this)">
+                <span class="goal-icon">⚡</span>
+                <div class="goal-name">Maintain weight</div>
+              </div>
+              <div class="goal-card" onclick="toggleGoal(this)">
+                <span class="goal-icon">💪</span>
+                <div class="goal-name">Build muscle</div>
+              </div>
+              <div class="goal-card" onclick="toggleGoal(this)">
+                <span class="goal-icon">🥦</span>
+                <div class="goal-name">Eat healthier</div>
+              </div>
+              <div class="goal-card" onclick="toggleGoal(this)">
+                <span class="goal-icon">💰</span>
+                <div class="goal-name">Save money on groceries</div>
+              </div>
+              <div class="goal-card" onclick="toggleGoal(this)">
+                <span class="goal-icon">⏱️</span>
+                <div class="goal-name">Save time cooking</div>
+              </div>
+            </div>
+          </div>
+          <div class="save-bar">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-save" onclick="saveProfile()">Save changes</button>
+          </div>
+        </div>
+
+        <!-- FOOD PREFERENCES PANEL -->
+        <div class="profile-panel" id="panel-food">
+          <div class="profile-section">
+            <h3>Dietary restrictions</h3>
+            <div class="tag-group" style="margin-top:0">
+              <input type="checkbox" class="tag-cb" id="p-veg" value="vegetarian"><label class="tag-label" for="p-veg">Vegetarian</label>
+              <input type="checkbox" class="tag-cb" id="p-vegan" value="vegan"><label class="tag-label" for="p-vegan">Vegan</label>
+              <input type="checkbox" class="tag-cb" id="p-gf" value="gluten-free"><label class="tag-label" for="p-gf">Gluten-Free</label>
+              <input type="checkbox" class="tag-cb" id="p-df" value="dairy-free"><label class="tag-label" for="p-df">Dairy-Free</label>
+              <input type="checkbox" class="tag-cb" id="p-keto" value="keto"><label class="tag-label" for="p-keto">Keto / Low-Carb</label>
+              <input type="checkbox" class="tag-cb" id="p-paleo" value="paleo"><label class="tag-label" for="p-paleo">Paleo</label>
+              <input type="checkbox" class="tag-cb" id="p-nut" value="nut-free"><label class="tag-label" for="p-nut">Nut-Free</label>
+              <input type="checkbox" class="tag-cb" id="p-halal" value="halal"><label class="tag-label" for="p-halal">Halal</label>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Preferences</h3>
+            <div class="profile-grid">
+              <div class="profile-field">
+                <label>Favourite cuisine</label>
+                <select id="pCuisine">
+                  <option>Varied / Surprise me</option><option>Mediterranean</option>
+                  <option>Asian-inspired</option><option>American comfort</option>
+                  <option>Mexican / Latin</option><option>Italian</option><option>Middle Eastern</option>
+                </select>
+              </div>
+              <div class="profile-field">
+                <label>Cooking skill level</label>
+                <select id="pSkill">
+                  <option>Beginner — keep it simple</option>
+                  <option selected>Intermediate</option>
+                  <option>Advanced — bring the challenge</option>
+                </select>
+              </div>
+              <div class="profile-field">
+                <label>Weekly grocery budget</label>
+                <select id="pBudget">
+                  <option>Under $50</option><option selected>$50–$100</option>
+                  <option>$100–$200</option><option>$200+</option>
+                </select>
+              </div>
+              <div class="profile-field">
+                <label>Typical cook time</label>
+                <select id="pCooktime">
+                  <option>15 min (quick)</option><option>30 min</option>
+                  <option selected>45 min</option><option>1 hour+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Foods you dislike or avoid</h3>
+            <div class="profile-field" style="margin-top:0">
+              <textarea id="pDislikes" placeholder="e.g. Cilantro, blue cheese, liver, Brussels sprouts..." style="width:100%;padding:.65rem .85rem;border:1px solid var(--border-strong);border-radius:7px;background:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;resize:vertical;min-height:80px"></textarea>
+            </div>
+          </div>
+          <div class="save-bar">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-save" onclick="saveProfile()">Save changes</button>
+          </div>
+        </div>
+
+        <!-- BILLING PANEL -->
+        <div class="profile-panel" id="panel-billing">
+          <div class="profile-section">
+            <h3>Current plan</h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+              <div>
+                <div style="font-size:1.2rem;font-weight:500;color:var(--ink);margin-bottom:.25rem">Free plan</div>
+                <div style="font-size:13px;color:var(--ink-muted)">Limited to 3-day plans and Lunch & Dinner only.</div>
+              </div>
+              <button class="btn-save" onclick="showPage('pricing',null)">Upgrade to Pro →</button>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Payment method</h3>
+            <div style="text-align:center;padding:2rem;color:var(--ink-muted);font-size:14px">
+              No payment method on file.<br>
+              <button class="btn-primary" style="margin-top:1rem;font-size:13px;padding:.65rem 1.25rem" onclick="showPage('pricing',null)">Choose a plan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRICING PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-pricing">
+  <div class="container">
+    <div class="pricing-header">
+      <h2>Simple, <em>honest</em> pricing</h2>
+      <p>Start free for 2 months. No credit card. Full Max access from day one.</p>
+    </div>
+
+    <!-- FREE TRIAL BANNER -->
+    <div style="background:linear-gradient(135deg,#1C1814,#4A4540);border-radius:14px;padding:2rem 2.5rem;margin-bottom:2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem">
+      <div>
+        <div style="font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.5rem">Limited time</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:400;color:#fff;margin-bottom:.4rem">2 months free — full <em style="font-style:italic;color:var(--terracotta)">Max</em> access</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.65)">Every feature unlocked. No credit card required. Cancel anytime.</div>
+      </div>
+      <button class="btn-primary" onclick="openAuth('signup')" style="background:var(--terracotta);white-space:nowrap;font-size:14px">✦ Start Free Trial</button>
+    </div>
+
+    <div class="billing-toggle">
+      <span class="on" id="lbl-mo">Monthly</span>
+      <div class="toggle-track" id="billingToggle" onclick="toggleBilling()"><div class="toggle-thumb"></div></div>
+      <span id="lbl-yr">Annual</span>
+      <span class="save-badge">Save 35%</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:3rem">
+
+      <!-- BASIC -->
+      <div class="price-card">
+        <div class="plan-name">Basic</div>
+        <div class="plan-price"><span class="price-amount" id="basic-price">$1.99</span><span class="price-period">/mo</span></div>
+        <div class="price-annual" id="basic-annual">&nbsp;</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>3-day meal plans</li>
+          <li>Lunch & Dinner only</li>
+          <li>Basic grocery list</li>
+          <li>1 cuisine style</li>
+          <li class="muted">Breakfast included</li>
+          <li class="muted">Recipe cards</li>
+          <li class="muted">Nutrition info</li>
+          <li class="muted">All cuisine styles</li>
+        </ul>
+        <button class="plan-cta" onclick="openAuth('signup')">Get Basic</button>
+      </div>
+
+      <!-- PRO -->
+      <div class="price-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><span class="price-amount" id="pro-price">$4.99</span><span class="price-period">/mo</span></div>
+        <div class="price-annual" id="pro-annual">&nbsp;</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>1–7 day plans</li>
+          <li>All meal combos</li>
+          <li>Full recipe cards</li>
+          <li>Nutrition breakdown</li>
+          <li>All 7 cuisine styles</li>
+          <li>Chef's Choice mode</li>
+          <li>Organized grocery list</li>
+          <li class="muted">Regenerate single day</li>
+          <li class="muted">Servings scaler</li>
+          <li class="muted">Save past plans</li>
+        </ul>
+        <button class="plan-cta" onclick="openAuth('signup')">Get Pro</button>
+      </div>
+
+      <!-- FAMILY -->
+      <div class="price-card featured">
+        <div class="featured-badge">Most popular</div>
+        <div class="plan-name">Family</div>
+        <div class="plan-price"><span class="price-amount" id="family-price">$9.99</span><span class="price-period">/mo</span></div>
+        <div class="price-annual" id="family-annual">&nbsp;</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>Up to 6 people</li>
+          <li>Multiple diet profiles</li>
+          <li>Shared grocery list</li>
+          <li>Kid-friendly meal filter</li>
+          <li class="muted">Regenerate single day</li>
+          <li class="muted">Servings scaler</li>
+          <li class="muted">Pantry mode</li>
+          <li class="muted">Save past plans</li>
+        </ul>
+        <button class="plan-cta primary" onclick="openAuth('signup')">Get Family →</button>
+      </div>
+
+      <!-- MAX -->
+      <div class="price-card" style="border:2px solid var(--gold);position:relative">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:11px;font-weight:500;padding:3px 14px;border-radius:10px;white-space:nowrap;letter-spacing:.05em">⭐ Best value</div>
+        <div class="plan-name">Max</div>
+        <div class="plan-price"><span class="price-amount" id="max-price">$12.99</span><span class="price-period">/mo</span></div>
+        <div class="price-annual" id="max-annual">&nbsp;</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>Everything in Family</li>
+          <li>Regenerate single day</li>
+          <li>Servings scaler</li>
+          <li>Pantry mode</li>
+          <li>Unlimited saved plans</li>
+          <li>PDF export</li>
+          <li>Shareable grocery link</li>
+          <li>Macro & calorie targets</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="plan-cta" onclick="openAuth('signup')" style="background:var(--gold);color:#fff;border-color:var(--gold)">Get Max ⭐</button>
+      </div>
+    </div>
+
+    <div class="pricing-faq">
+      <h3>Common questions</h3>
+      <div class="faq-item"><div class="faq-q">What happens after my 2-month free trial?</div><div class="faq-a">After 2 months you can choose any paid plan — Basic starts at just $1.99/mo. If you don't pick a plan, your account moves to read-only mode so you never lose your saved plans.</div></div>
+      <div class="faq-item"><div class="faq-q">Do I need an Anthropic API key?</div><div class="faq-a">Nope — on all paid plans Cookly handles the AI behind the scenes. No API keys, no extra costs, no technical setup.</div></div>
+      <div class="faq-item"><div class="faq-q">How is Cookly different from Mealime or PlateJoy?</div><div class="faq-a">They use fixed recipe databases — you'll eventually see repeats. Cookly's AI generates a completely unique plan every time, for any dietary combo, at a lower price than both.</div></div>
+      <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes — no contracts, no hassle. Cancel from your account settings and keep access until the end of your billing period.</div></div>
+      <div class="faq-item"><div class="faq-q">What's the annual discount?</div><div class="faq-a">Pay yearly and save 35% across all plans. Basic drops to $1.29/mo, Pro to $3.25/mo, Family to $6.50/mo, and Max to $8.45/mo.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     REFERRAL PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-referral">
+  <div class="container-sm">
+    <div class="page-header">
+      <h2>Earn a <em>free month</em></h2>
+      <p>Share Cookly with friends. Every time someone you refer subscribes, you earn.</p>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:1.5rem">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;margin-bottom:1.5rem">How it works</h3>
+      <div style="display:flex;flex-direction:column;gap:1.25rem">
+        <div style="display:flex;align-items:flex-start;gap:1rem">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--terracotta);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;flex-shrink:0">1</div>
+          <div>
+            <div style="font-size:14px;font-weight:500;margin-bottom:.2rem">Share your unique link</div>
+            <div style="font-size:13px;color:var(--ink-muted)">Copy your referral link below and send it to friends, family, or post it anywhere.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--terracotta);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;flex-shrink:0">2</div>
+          <div>
+            <div style="font-size:14px;font-weight:500;margin-bottom:.2rem">They sign up & subscribe</div>
+            <div style="font-size:13px;color:var(--ink-muted)">Your friend gets a 2-month free Max trial. When they subscribe to any paid plan, you get credit.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:1rem">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--terracotta);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;flex-shrink:0">3</div>
+          <div>
+            <div style="font-size:14px;font-weight:500;margin-bottom:.2rem">You earn free months</div>
+            <div style="font-size:13px;color:var(--ink-muted)">Your <strong>1st referral</strong> = 1 free month. Then <strong>every 2 referrals after that</strong> = another free month. Keep going forever.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REWARDS TRACKER -->
+    <div style="background:var(--parchment);border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;text-align:center;margin-bottom:1.5rem">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:var(--terracotta);line-height:1" id="refCount">0</div>
+          <div style="font-size:12px;color:var(--ink-muted);margin-top:.3rem">Total referrals</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:var(--sage);line-height:1" id="refEarned">0</div>
+          <div style="font-size:12px;color:var(--ink-muted);margin-top:.3rem">Free months earned</div>
+        </div>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:var(--gold);line-height:1" id="refNext">1</div>
+          <div style="font-size:12px;color:var(--ink-muted);margin-top:.3rem">Referrals to next reward</div>
+        </div>
+      </div>
+      <!-- Progress bar -->
+      <div style="background:rgba(28,24,20,0.08);border-radius:20px;height:8px;margin-bottom:.5rem;overflow:hidden">
+        <div id="refProgress" style="height:100%;background:var(--terracotta);border-radius:20px;width:0%;transition:width .4s"></div>
+      </div>
+      <div style="font-size:12px;color:var(--ink-muted);text-align:center" id="refProgressLabel">Refer 1 friend to earn your first free month</div>
+    </div>
+
+    <!-- REFERRAL LINK -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;margin-bottom:1rem">Your referral link</h3>
+      <div style="display:flex;gap:8px;margin-bottom:1rem">
+        <input type="text" id="refLink" value="https://cookly.app/ref/your-code" readonly style="flex:1;padding:.65rem .85rem;border:1px solid var(--border-strong);border-radius:7px;background:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-muted)">
+        <button class="btn-secondary" onclick="copyRefLink()" id="copyBtn">Copy link</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="shareRef('twitter')" style="padding:.5rem 1rem;background:#000;color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer">Share on X</button>
+        <button onclick="shareRef('facebook')" style="padding:.5rem 1rem;background:#1877F2;color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer">Share on Facebook</button>
+        <button onclick="shareRef('message')" style="padding:.5rem 1rem;background:var(--sage);color:#fff;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer">Send via text</button>
+      </div>
+    </div>
+
+    <!-- SHARE MESSAGE -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.75rem">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;margin-bottom:.75rem">Suggested message</h3>
+      <div style="background:var(--parchment);border-radius:8px;padding:1rem;font-size:13px;color:var(--ink-soft);line-height:1.65;margin-bottom:.85rem" id="shareMsg">
+        "Hey! I've been using this AI meal planner called Cookly — it plans my whole week and generates a grocery list automatically. You get 2 months free when you sign up: https://cookly.app/ref/your-code"
+      </div>
+      <button class="btn-secondary" onclick="copyShareMsg()">Copy message</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     AUTH MODAL
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="authOverlay" onclick="closeAuth(event)">
+  <div class="auth-modal">
+    <button class="modal-close" onclick="closeAuth()">×</button>
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400">Cook<em style="font-style:italic;color:var(--terracotta)">ly</em></div>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="authTabLogin" onclick="switchAuthTab('login')">Log in</div>
+      <div class="auth-tab" id="authTabSignup" onclick="switchAuthTab('signup')">Sign up</div>
+    </div>
+    <div class="auth-form active" id="authFormLogin">
+      <div class="social-btns" style="margin-bottom:1rem">
+        <button class="btn-social" onclick="socialLogin('google')">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        <button class="btn-social" onclick="socialLogin('apple')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Continue with Apple
+        </button>
+      </div>
+      <div class="auth-divider">or</div>
+      <div class="auth-field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@email.com"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="handleLogin()">Log in</button>
+      <div class="auth-footer"><a onclick="switchAuthTab('signup')">Don't have an account? Sign up →</a></div>
+    </div>
+    <div class="auth-form" id="authFormSignup">
+      <div class="social-btns" style="margin-bottom:1rem">
+        <button class="btn-social" onclick="socialLogin('google')">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Sign up with Google
+        </button>
+        <button class="btn-social" onclick="socialLogin('apple')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Sign up with Apple
+        </button>
+      </div>
+      <div class="auth-divider">or</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="auth-field"><label>First name</label><input type="text" id="signupFirst" placeholder="Jane"></div>
+        <div class="auth-field"><label>Last name</label><input type="text" id="signupLast" placeholder="Smith"></div>
+      </div>
+      <div class="auth-field"><label>Email</label><input type="email" id="signupEmail" placeholder="you@email.com"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="signupPassword" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="handleSignup()">Create account</button>
+      <div class="auth-footer"><a onclick="switchAuthTab('login')">Already have an account? Log in →</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- RECIPE MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3 id="modalTitle"></h3>
+    <p class="modal-meta" id="modalMeta"></p>
+    <div class="scaler-row">
+      <span class="scaler-label">Adjust servings</span>
+      <div class="scaler-controls">
+        <button class="scaler-btn" onclick="changeServings(-1)">−</button>
+        <span class="scaler-val" id="scalerVal">2 servings</span>
+        <button class="scaler-btn" onclick="changeServings(1)">+</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+let planData=null,recipeCache={},currentStep=1,currentRecipeName='',currentRecipeServings=2,billingAnnual=false;
+let userState={loggedIn:false,name:'',email:'',avatar:'👤'};
+let savedRecipes=JSON.parse(localStorage.getItem('cookly_recipes')||'[]');
+
+const loadingMessages=['Balancing nutrition, flavour & your schedule...','Sourcing seasonal ingredients...','Cross-referencing your dietary needs...','Writing out the shopping list...','Adding finishing touches...'];
+
+// ── NAV ──
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn){
+    btn.classList.add('active');
+  } else {
+    document.querySelectorAll('.nav-link').forEach(l=>{
+      if(l.textContent.trim().toLowerCase()===id||(id==='home'&&l.textContent.trim()==='Home')||(id==='planner'&&l.textContent.trim()==='Planner')||(id==='recipes'&&l.textContent.trim()==='Recipes')||(id==='pricing'&&l.textContent.trim()==='Pricing')) l.classList.add('active');
+    });
+  }
+  window.scrollTo(0,0);
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+function toggleMobile(){document.getElementById('mobileMenu').classList.toggle('open')}
+
+// ── AUTH ──
+function openAuth(tab){
+  switchAuthTab(tab);
+  document.getElementById('authOverlay').classList.add('active');
+}
+function closeAuth(e){
+  if(!e||e.target===document.getElementById('authOverlay'))
+    document.getElementById('authOverlay').classList.remove('active');
+}
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+  document.getElementById('authTab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  document.getElementById('authForm'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+}
+function handleLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPassword').value;
+  if(!email||!pass){showToast('Please fill in all fields');return;}
+  loginUser(email.split('@')[0],email,'👨‍🍳');
+  closeAuth();
+}
+function handleSignup(){
+  const first=document.getElementById('signupFirst').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const pass=document.getElementById('signupPassword').value;
+  if(!first||!email||!pass){showToast('Please fill in all fields');return;}
+  loginUser(first,email,'👨‍🍳');
+  closeAuth();
+  showPage('profile',null);
+}
+function socialLogin(provider){
+  loginUser('Friend','user@'+provider+'.com','👨‍🍳');
+  closeAuth();
+  showToast('Signed in with '+provider.charAt(0).toUpperCase()+provider.slice(1)+'!');
+}
+function loginUser(name,email,avatar){
+  userState={loggedIn:true,name,email,avatar};
+  document.getElementById('navGuest').style.display='none';
+  document.getElementById('navUser').style.display='flex';
+  document.getElementById('navAvatar').textContent=avatar;
+  document.getElementById('profileName').textContent=name;
+  document.getElementById('profileEmail').textContent=email;
+  document.getElementById('pFirstName').value=name;
+  document.getElementById('pEmail').value=email;
+  showToast('Welcome, '+name+'! 👋');
+}
+
+// ── PROFILE ──
+function switchProfilePanel(id,btn){
+  document.querySelectorAll('.profile-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.profile-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function setAvatarEmoji(emoji,el){
+  document.querySelectorAll('.avatar-preset').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('avatarEmoji').textContent=emoji;
+  document.getElementById('avatarImg').style.display='none';
+  document.getElementById('avatarEmoji').style.display='block';
+  document.getElementById('navAvatar').textContent=emoji;
+  userState.avatar=emoji;
+}
+function handleAvatarUpload(input){
+  if(!input.files||!input.files[0])return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('avatarImg');
+    img.src=e.target.result;
+    img.style.display='block';
+    document.getElementById('avatarEmoji').style.display='none';
+    document.getElementById('navAvatar').innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function setUnits(type,btn){
+  document.querySelectorAll('.unit-opt').forEach(o=>o.classList.remove('active'));
+  btn.classList.add('active');
+  const isMetric=type==='metric';
+  document.getElementById('heightLabel').textContent=isMetric?'Height (cm)':'Height (ft / in)';
+  document.getElementById('weightLabel').textContent=isMetric?'Weight (kg)':'Weight (lbs)';
+  document.getElementById('pHeightIn').style.display=isMetric?'none':'block';
+}
+function toggleGoal(el){el.classList.toggle('selected')}
+function saveProfile(){showToast('Profile saved ✓')}
+
+// ── BILLING ──
+function toggleBilling(){
+  billingAnnual=!billingAnnual;
+  document.getElementById('billingToggle').classList.toggle('annual',billingAnnual);
+  document.getElementById('lbl-mo').classList.toggle('on',!billingAnnual);
+  document.getElementById('lbl-yr').classList.toggle('on',billingAnnual);
+  document.getElementById('basic-price').textContent=billingAnnual?'$1.29':'$1.99';
+  document.getElementById('basic-annual').textContent=billingAnnual?'billed $15.50/year':'';
+  document.getElementById('pro-price').textContent=billingAnnual?'$3.25':'$4.99';
+  document.getElementById('pro-annual').textContent=billingAnnual?'billed $39/year':'';
+  document.getElementById('family-price').textContent=billingAnnual?'$6.50':'$9.99';
+  document.getElementById('family-annual').textContent=billingAnnual?'billed $78/year':'';
+  document.getElementById('max-price').textContent=billingAnnual?'$8.45':'$12.99';
+  document.getElementById('max-annual').textContent=billingAnnual?'billed $101/year':'';
+}
+
+// ── REFERRAL ──
+let referralCount=parseInt(localStorage.getItem('cookly_refs')||'0');
+function updateReferralUI(){
+  document.getElementById('refCount').textContent=referralCount;
+  const earned = referralCount===0?0:1+Math.floor((referralCount-1)/2);
+  document.getElementById('refEarned').textContent=earned;
+  const nextMilestone = referralCount===0?1:referralCount%2===0?2:1;
+  const progress = referralCount===0?0:referralCount===1?100:((referralCount%2===0?2:referralCount%2)/2)*100;
+  document.getElementById('refNext').textContent=nextMilestone;
+  document.getElementById('refProgress').style.width=Math.min(progress,100)+'%';
+  document.getElementById('refProgressLabel').textContent=
+    referralCount===0?'Refer 1 friend to earn your first free month':
+    referralCount===1?'1 more referral = another free month':
+    nextMilestone===2?`${nextMilestone} more referrals = another free month`:`${nextMilestone} more referral = another free month`;
+}
+function copyRefLink(){
+  navigator.clipboard.writeText(document.getElementById('refLink').value)
+    .then(()=>{document.getElementById('copyBtn').textContent='Copied!';setTimeout(()=>document.getElementById('copyBtn').textContent='Copy link',2000);})
+    .catch(()=>showToast('Copy failed'));
+}
+function copyShareMsg(){
+  navigator.clipboard.writeText(document.getElementById('shareMsg').textContent.trim())
+    .then(()=>showToast('Message copied!'))
+    .catch(()=>showToast('Copy failed'));
+}
+function shareRef(platform){
+  const url='https://cookly.app/ref/your-code';
+  const msg=encodeURIComponent('I\'ve been using this AI meal planner called Cookly — it plans my whole week and generates a grocery list. You get 2 months free: '+url);
+  if(platform==='twitter') window.open('https://twitter.com/intent/tweet?text='+msg,'_blank');
+  else if(platform==='facebook') window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'_blank');
+  else if(platform==='message') window.open('sms:?body='+msg);
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  if(getApiKey()){
+    document.getElementById('apiBanner').style.background='#f0fbf4';
+    document.getElementById('apiBanner').style.borderColor='#9fe1cb';
+    document.getElementById('apiKeySaved').style.display='inline';
+  }
+  renderRecipesPage();
+  updateReferralUI();
+});
+
+// ── API KEY ──
+function getApiKey(){return localStorage.getItem('cookly_api_key')||''}
+function saveApiKey(){
+  const key=document.getElementById('apiKeyInput').value.trim();
+  if(!key){showToast('Please enter your API key');return;}
+  localStorage.setItem('cookly_api_key',key);
+  document.getElementById('apiKeySaved').style.display='inline';
+  document.getElementById('apiKeyInput').value='';
+  document.getElementById('apiBanner').style.background='#f0fbf4';
+  document.getElementById('apiBanner').style.borderColor='#9fe1cb';
+  showToast('API key saved!');
+}
+
+// ── CLAUDE API ──
+async function callClaude(prompt,maxTokens){
+  const apiKey=getApiKey();
+  if(!apiKey) throw new Error('No API key set');
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+  });
+  if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||'API error');}
+  const data=await resp.json();
+  return data.content.map(b=>b.text||'').join('').trim();
+}
+
+// ── PLANNER ──
+function goToStep(n){
+  if(n>1&&!planData)return;
+  currentStep=n;
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section'+(n===3?2:n)).classList.add('active');
+  document.querySelectorAll('.step-tab').forEach((t,i)=>{
+    t.classList.remove('active','done');
+    if(i+1===n) t.classList.add('active');
+    else if(i+1<n) t.classList.add('done');
+  });
+  if(n===3&&planData) switchOutTab('grocery',document.querySelectorAll('.out-tab')[1]);
+}
+function switchOutTab(which,el){
+  document.querySelectorAll('.out-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.out-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(which==='plan'?'outPlan':'outGrocery').classList.add('active');
+}
+async function generatePlan(){
+  if(!getApiKey()){showToast('Please enter your Anthropic API key first');document.getElementById('apiKeyInput').focus();return;}
+  const servings=document.getElementById('servings').value;
+  const days=document.getElementById('days').value;
+  const meals=document.getElementById('meals').value;
+  const cuisine=document.getElementById('cuisine').value;
+  const cooktime=document.getElementById('cooktime').value;
+  const budget=document.getElementById('budget').value;
+  const notes=document.getElementById('notes').value.trim();
+  const diets=[...document.querySelectorAll('.tag-cb:checked')].map(c=>c.value);
+  const dietStr=diets.length?`Dietary: ${diets.join(', ')}. `:'';
+  const notesStr=notes?`Notes: ${notes}. `:'';
+  const cuisineInstruction = cuisine === "Chef's Choice (mixed cuisines)" 
+    ? "Use a DIFFERENT cuisine for each day — mix cuisines like Thai, Italian, Mexican, Japanese, Indian, Mediterranean, American across the days. Make it genuinely varied and exciting."
+    : `Cuisine style: ${cuisine}.`;
+  const prompt=`Create a meal plan for ${servings}, for ${days}, with ${meals}. ${cuisineInstruction} Max cook time: ${cooktime}. Budget: ${budget}. ${dietStr}${notesStr}
+Return ONLY valid JSON, no markdown:
+{"title":"short evocative plan title","days":[{"day":"Monday","breakfast":{"name":"meal name","time":"15 min"},"lunch":{"name":"meal name","time":"20 min"},"dinner":{"name":"meal name","time":"35 min"}}],"nutrition":{"avgCalories":1950,"avgProtein":"85g","avgCarbs":"220g","avgFat":"65g"},"grocery":{"Produce":["2 bell peppers"],"Proteins":["1 lb chicken breast"],"Dairy":[],"Pantry":["olive oil"],"Bakery":[],"Frozen":[],"Other":[]}}
+Only include breakfast/lunch/dinner keys for the meals requested. Grocery list must cover all meals.`;
+  document.getElementById('section1').classList.remove('active');
+  const loading=document.getElementById('loadingState');
+  loading.classList.add('active');
+  let msgIdx=0;
+  const msgInterval=setInterval(()=>{
+    msgIdx=(msgIdx+1)%loadingMessages.length;
+    document.getElementById('loadingMsg').textContent=loadingMessages[msgIdx];
+  },2000);
+  try{
+    const text=await callClaude(prompt,1500);
+    planData=JSON.parse(text.replace(/```json|```/g,'').trim());
+    clearInterval(msgInterval);loading.classList.remove('active');
+    renderPlan();
+    // Save all meals to recipes
+    planData.days.forEach(day=>{
+      ['breakfast','lunch','dinner'].filter(m=>day[m]).forEach(m=>{
+        const name=day[m].name;
+        if(!savedRecipes.find(r=>r.name===name)){
+          savedRecipes.push({name,type:m,day:day.day,time:day[m].time,added:new Date().toLocaleDateString()});
+        }
+      });
+    });
+    localStorage.setItem('cookly_recipes',JSON.stringify(savedRecipes));
+    renderRecipesPage();
+  }catch(e){
+    clearInterval(msgInterval);
+    loading.classList.remove('active');
+    document.getElementById('section1').classList.add('active');
+    showToast('Error: '+(e.message||'Something went wrong'));
+  }
+}
+async function regenerateDay(dayName,btnEl){
+  if(!getApiKey()){showToast('API key required');return;}
+  btnEl.classList.add('loading');btnEl.style.pointerEvents='none';
+  const meals=document.getElementById('meals').value;
+  const cuisine=document.getElementById('cuisine').value;
+  const cooktime=document.getElementById('cooktime').value;
+  const budget=document.getElementById('budget').value;
+  const servings=document.getElementById('servings').value;
+  const diets=[...document.querySelectorAll('.tag-cb:checked')].map(c=>c.value);
+  const existing=planData.days.filter(d=>d.day!==dayName).map(d=>['breakfast','lunch','dinner'].filter(m=>d[m]).map(m=>d[m].name).join(', ')).join(' | ');
+  const dietStr=diets.length?' Dietary: '+diets.join(', ')+'.':'';
+  const prompt=`Generate a NEW day of meals for ${dayName} for ${servings}. Meals: ${meals}. Cuisine: ${cuisine}. Cook time: ${cooktime}. Budget: ${budget}.${dietStr} Do NOT repeat any of these meals already in the plan: ${existing}.
+Return ONLY valid JSON, no markdown: {"day":"${dayName}","breakfast":{"name":"meal","time":"15 min"},"lunch":{"name":"meal","time":"20 min"},"dinner":{"name":"meal","time":"35 min"}}
+Only include meal keys for: ${meals}.`;
+  try{
+    const text=await callClaude(prompt,400);
+    const newDay=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const idx=planData.days.findIndex(d=>d.day===dayName);
+    if(idx!==-1) planData.days[idx]=newDay;
+    ['breakfast','lunch','dinner'].forEach(m=>{if(newDay[m]) delete recipeCache[newDay[m].name+'_'+currentRecipeServings];});
+    renderWeekGrid();
+    showToast(dayName+' refreshed!');
+  }catch(e){showToast('Could not regenerate day');}
+  finally{btnEl.classList.remove('loading');btnEl.style.pointerEvents='';}
+}
+function renderPlan(){
+  document.getElementById('section2').classList.add('active');
+  currentStep=2;
+  document.querySelectorAll('.step-tab').forEach((t,i)=>{
+    t.classList.remove('active','done');
+    if(i===1) t.classList.add('active');
+    else if(i===0) t.classList.add('done');
+  });
+  if(planData.title) document.getElementById('planTitle').textContent=planData.title;
+  const n=planData.nutrition;
+  document.getElementById('nutritionStrip').innerHTML=`
+    <div class="nut-card"><div class="nut-value">${n.avgCalories}</div><div class="nut-label">Avg. kcal / day</div></div>
+    <div class="nut-card"><div class="nut-value">${n.avgProtein}</div><div class="nut-label">Avg. Protein</div></div>
+    <div class="nut-card"><div class="nut-value">${n.avgCarbs}</div><div class="nut-label">Avg. Carbs</div></div>
+    <div class="nut-card"><div class="nut-value">${n.avgFat}</div><div class="nut-label">Avg. Fat</div></div>`;
+  renderWeekGrid();
+  document.getElementById('groceryGrid').innerHTML=Object.entries(planData.grocery)
+    .filter(([,items])=>items&&items.length>0)
+    .map(([cat,items])=>`<div class="grocery-cat"><h4>${cat}</h4>${items.map(item=>`<div class="grocery-item" onclick="toggleCheck(this)"><div class="grocery-check"></div><span>${item}</span></div>`).join('')}</div>`).join('');
+}
+function renderWeekGrid(){
+  const abbr={Monday:'Mon',Tuesday:'Tue',Wednesday:'Wed',Thursday:'Thu',Friday:'Fri',Saturday:'Sat',Sunday:'Sun'};
+  const cols=Math.min(planData.days.length,7);
+  const grid=document.getElementById('weekGrid');
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  grid.innerHTML=planData.days.map(day=>`
+    <div class="day-card">
+      <div class="day-header"><span>${abbr[day.day]||day.day}</span><button class="regen-btn" title="Regenerate ${day.day}" onclick="regenerateDay('${day.day}',this)">↻</button></div>
+      <div class="day-meals">${['breakfast','lunch','dinner'].filter(m=>day[m]).map(m=>`
+        <div class="meal-slot" onclick="openRecipe('${day.day}','${m}','${(day[m].name||'').replace(/'/g,"\\'")}')">
+          <div class="meal-type ${m}">${m}</div>
+          <div class="meal-name">${day[m].name}</div>
+        </div>`).join('')}</div>
+    </div>`).join('');
+}
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  el.querySelector('.grocery-check').textContent=el.classList.contains('checked')?'✓':'';
+}
+function uncheckAll(){
+  document.querySelectorAll('.grocery-item.checked').forEach(el=>{el.classList.remove('checked');el.querySelector('.grocery-check').textContent='';});
+}
+
+// ── RECIPES ──
+const mealEmojis={breakfast:'🍳',lunch:'🥗',dinner:'🍽️'};
+function renderRecipesPage(){
+  const content=document.getElementById('recipesContent');
+  if(!savedRecipes.length){
+    content.innerHTML=`<div class="recipes-empty"><span class="empty-icon">🍳</span><p>No recipes yet — generate a meal plan and your recipes will appear here.</p><button class="btn-primary" onclick="showPage('planner',null)">✦ Generate a Plan</button></div>`;
+    return;
+  }
+  content.innerHTML=`<div class="recipes-grid">${savedRecipes.map((r,i)=>`
+    <div class="recipe-card" onclick="openSavedRecipe(${i})">
+      <div class="recipe-thumb">${mealEmojis[r.type]||'🍽️'}</div>
+      <div class="recipe-info">
+        <div class="recipe-tag">${r.type} · ${r.time||''}</div>
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-meta">Added ${r.added}</div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function filterRecipes(q){
+  const filtered=savedRecipes.filter(r=>r.name.toLowerCase().includes(q.toLowerCase()));
+  const content=document.getElementById('recipesContent');
+  if(!filtered.length){content.innerHTML='<div style="text-align:center;padding:3rem;color:var(--ink-muted);font-size:14px">No recipes match your search.</div>';return;}
+  content.innerHTML=`<div class="recipes-grid">${filtered.map((r,i)=>`
+    <div class="recipe-card" onclick="openSavedRecipe(${savedRecipes.indexOf(r)})">
+      <div class="recipe-thumb">${mealEmojis[r.type]||'🍽️'}</div>
+      <div class="recipe-info">
+        <div class="recipe-tag">${r.type} · ${r.time||''}</div>
+        <div class="recipe-name">${r.name}</div>
+        <div class="recipe-meta">Added ${r.added}</div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function openSavedRecipe(idx){
+  const r=savedRecipes[idx];
+  currentRecipeName=r.name;
+  currentRecipeServings=2;
+  document.getElementById('modalTitle').textContent=r.name;
+  document.getElementById('modalMeta').textContent=r.type+' · '+r.time;
+  document.getElementById('scalerVal').textContent='2 servings';
+  document.getElementById('modalOverlay').classList.add('active');
+  fetchRecipe(r.name,false);
+}
+
+// ── RECIPE MODAL ──
+function updateScalerDisplay(){
+  const base=parseServingsNum(document.getElementById('servings').value);
+  currentRecipeServings=base;
+  document.getElementById('scalerVal').textContent=base+(base===1?' serving':' servings');
+}
+function parseServingsNum(str){const m=str.match(/\d+/);return m?parseInt(m[0]):2;}
+function changeServings(delta){
+  const nv=Math.max(1,Math.min(12,currentRecipeServings+delta));
+  if(nv===currentRecipeServings)return;
+  currentRecipeServings=nv;
+  document.getElementById('scalerVal').textContent=nv+(nv===1?' serving':' servings');
+  if(currentRecipeName) fetchRecipe(currentRecipeName,true);
+}
+async function openRecipe(day,mealType,mealName){
+  currentRecipeName=mealName;
+  updateScalerDisplay();
+  document.getElementById('modalTitle').textContent=mealName;
+  document.getElementById('modalMeta').textContent=day+' · '+mealType.charAt(0).toUpperCase()+mealType.slice(1);
+  document.getElementById('modalOverlay').classList.add('active');
+  fetchRecipe(mealName,false);
+}
+async function fetchRecipe(mealName,forceRefresh){
+  const ck=mealName+'_'+currentRecipeServings;
+  if(!forceRefresh&&recipeCache[ck]){document.getElementById('modalBody').textContent=recipeCache[ck];return;}
+  document.getElementById('modalBody').innerHTML='<div style="text-align:center;padding:2rem;color:var(--ink-muted)"><span style="font-size:2rem;display:block">🍳</span><br>Loading recipe...</div>';
+  const diets=[...document.querySelectorAll('.tag-cb:checked')].map(c=>c.value);
+  const s=currentRecipeServings;
+  try{
+    const dietNote=diets.length?' Dietary restrictions: '+diets.join(', ')+'.':'';
+    const text=await callClaude(`Write a concise recipe for "${mealName}" scaled for ${s} ${s===1?'person':'people'}.${dietNote}
+
+Format (plain text, no markdown):
+Serves: ${s}
+Prep: X min | Cook: X min
+
+INGREDIENTS
+- item
+- item
+
+INSTRUCTIONS
+1. Step
+2. Step
+
+TIPS
+One brief tip.`,800);
+    recipeCache[ck]=text;
+    if(currentRecipeName===mealName) document.getElementById('modalBody').textContent=text;
+  }catch(e){document.getElementById('modalBody').textContent='Could not load recipe. Please try again.';}
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('active');
+}
+
+// ── COPY ──
+function copyAll(){
+  if(!planData)return;
+  let text=(planData.title||'Meal Plan')+'\n\n';
+  planData.days.forEach(day=>{
+    text+=day.day+'\n';
+    ['breakfast','lunch','dinner'].filter(m=>day[m]).forEach(m=>{text+=`  ${m.charAt(0).toUpperCase()+m.slice(1)}: ${day[m].name}\n`;});
+    text+='\n';
+  });
+  text+='GROCERY LIST\n';
+  Object.entries(planData.grocery).filter(([,v])=>v&&v.length).forEach(([cat,items])=>{text+=`\n${cat}:\n`+items.map(i=>`  - ${i}`).join('\n')+'\n';});
+  navigator.clipboard.writeText(text).then(()=>showToast('Copied!')).catch(()=>showToast('Copy failed'));
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
