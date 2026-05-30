@@ -509,16 +509,6 @@ footer a{color:var(--terracotta);text-decoration:none}
       <p>Fill in your preferences below and let the AI do the rest.</p>
     </div>
 
-    <div class="api-banner" id="apiBanner">
-      <div class="api-banner-text">
-        <strong>🔑 Anthropic API Key Required</strong>
-        <span>Get yours free at <a href="https://console.anthropic.com" target="_blank" style="color:var(--terracotta)">console.anthropic.com</a> — stored only in your browser.</span>
-      </div>
-      <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off">
-      <button class="api-save-btn" onclick="saveApiKey()">Save Key</button>
-      <span class="api-key-saved" id="apiKeySaved">✓ Key saved</span>
-    </div>
-
     <div class="steps-bar">
       <div class="step-tab active" id="tab1" onclick="goToStep(1)"><span class="step-dot">1</span><span> Preferences</span></div>
       <div class="step-tab" id="tab2" onclick="goToStep(2)"><span class="step-dot">2</span><span> Your Plan</span></div>
@@ -1331,11 +1321,6 @@ function shareRef(platform){
   else if(platform==='message') window.open('sms:?body='+msg);
 }
 window.addEventListener('DOMContentLoaded',()=>{
-  if(getApiKey()){
-    document.getElementById('apiBanner').style.background='#f0fbf4';
-    document.getElementById('apiBanner').style.borderColor='#9fe1cb';
-    document.getElementById('apiKeySaved').style.display='inline';
-  }
   renderRecipesPage();
   updateReferralUI();
 });
@@ -1353,18 +1338,16 @@ function saveApiKey(){
   showToast('API key saved!');
 }
 
-// ── CLAUDE API ──
+// ── CLAUDE API — routes through secure serverless function ──
 async function callClaude(prompt,maxTokens){
-  const apiKey=getApiKey();
-  if(!apiKey) throw new Error('No API key set');
-  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+  const resp=await fetch('/api/generate',{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt,maxTokens:maxTokens||1500})
   });
-  if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||'API error');}
+  if(!resp.ok){const e=await resp.json();throw new Error(e.error||'Something went wrong');}
   const data=await resp.json();
-  return data.content.map(b=>b.text||'').join('').trim();
+  return data.text;
 }
 
 // ── PLANNER ──
@@ -1387,7 +1370,6 @@ function switchOutTab(which,el){
   document.getElementById(which==='plan'?'outPlan':'outGrocery').classList.add('active');
 }
 async function generatePlan(){
-  if(!getApiKey()){showToast('Please enter your Anthropic API key first');document.getElementById('apiKeyInput').focus();return;}
   const servings=document.getElementById('servings').value;
   const days=document.getElementById('days').value;
   const meals=document.getElementById('meals').value;
@@ -1437,7 +1419,6 @@ Only include breakfast/lunch/dinner keys for the meals requested. Grocery list m
   }
 }
 async function regenerateDay(dayName,btnEl){
-  if(!getApiKey()){showToast('API key required');return;}
   btnEl.classList.add('loading');btnEl.style.pointerEvents='none';
   const meals=document.getElementById('meals').value;
   const cuisine=document.getElementById('cuisine').value;
