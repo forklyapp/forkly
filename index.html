@@ -318,6 +318,51 @@ footer a{color:var(--terracotta);text-decoration:none}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:.6rem 1.4rem;border-radius:20px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;z-index:999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ── DASHBOARD ── */
+.dash-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:2rem}
+.dash-action{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s}
+.dash-action:hover{border-color:var(--terracotta);box-shadow:0 4px 16px rgba(196,98,58,0.08)}
+.dash-action:active{transform:scale(.98)}
+.da-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--terracotta);flex-shrink:0}
+.da-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--ink);line-height:1.2}
+.da-sub{font-size:11px;color:var(--ink-muted);margin-top:2px}
+.week-strip{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem}
+.week-strip-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem}
+.week-strip-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--ink)}
+.week-strip-link{font-size:11px;color:var(--terracotta);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+.week-days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.week-day{text-align:center;cursor:pointer;border-radius:10px;padding:6px 2px;transition:background .15s}
+.week-day:hover{background:var(--parchment)}
+.wd-label{font-size:10px;color:var(--ink-muted);font-weight:500;letter-spacing:.06em;margin-bottom:5px;text-transform:uppercase}
+.wd-photo{width:100%;aspect-ratio:1/1;border-radius:9px;overflow:hidden;background:var(--parchment);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-muted);border:1px solid var(--border)}
+.wd-photo img{width:100%;height:100%;object-fit:cover}
+.week-day.today .wd-label{color:var(--terracotta)}
+.week-day.today .wd-photo{border-color:var(--terracotta)}
+
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav{display:none}
+@media(max-width:768px){
+  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;background:rgba(250,247,242,0.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border);z-index:600;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+  .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;color:var(--ink-muted);cursor:pointer;padding:4px 0;border-radius:8px}
+  .bnav-ico{font-size:17px;line-height:1}
+  .bnav-item.active{color:var(--terracotta)}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  #pwaBanner{bottom:calc(70px + env(safe-area-inset-bottom,0px)) !important}
+  /* bottom-sheet modals */
+  .modal-overlay{align-items:flex-end !important}
+  .modal-overlay .modal,.modal-overlay .auth-modal{width:100%;max-width:100%;max-height:88vh;border-radius:18px 18px 0 0;margin:0;animation:sheet-up .22s ease}
+  @keyframes sheet-up{from{transform:translateY(40px);opacity:.6}to{transform:translateY(0);opacity:1}}
+  /* prevent iOS focus zoom */
+  input,select,textarea{font-size:16px !important}
+  /* touch targets */
+  .regen-meal-btn,.heart-btn{opacity:1 !important;width:26px;height:26px}
+  .dash-actions{grid-template-columns:1fr;gap:9px}
+  .week-days{gap:5px}
+}
+button:active{transform:scale(.985)}
+.heart-btn.saved{color:var(--terracotta);border-color:var(--terracotta);opacity:1 !important}
+
 /* ── FOOD CALENDAR ── */
 .food-cal{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem}
 .fc-head{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:.85rem}
@@ -602,6 +647,25 @@ footer a{color:var(--terracotta);text-decoration:none}
       </div>
     </div>
 
+    <!-- Quick actions -->
+    <div class="dash-actions">
+      <div class="dash-action" onclick="showPage('planner',null)">
+        <div class="da-icon" style="background:linear-gradient(135deg,#FAF0EB,#F5E0D5)">✦</div>
+        <div><div class="da-title">Plan your week</div><div class="da-sub">Fresh meals, sorted groceries</div></div>
+      </div>
+      <div class="dash-action" onclick="showPage('tracker',null)">
+        <div class="da-icon" style="background:linear-gradient(135deg,#EEF2EA,#DFE8D8)">◷</div>
+        <div><div class="da-title">Track today</div><div class="da-sub">Macros, water &amp; meal photos</div></div>
+      </div>
+      <div class="dash-action" onclick="showPage('recipes',null)">
+        <div class="da-icon" style="background:linear-gradient(135deg,#F6F1E7,#EFE5D0)">♥</div>
+        <div><div class="da-title">Recipe book</div><div class="da-sub">The meals you loved</div></div>
+      </div>
+    </div>
+
+    <!-- Your week in food -->
+    <div id="dashWeekStrip" style="margin-bottom:2rem"></div>
+
     <!-- Today's macros (primary) -->
     <div id="dashTracker" style="margin-bottom:2rem">
       <!-- Populated by JS -->
@@ -614,6 +678,7 @@ footer a{color:var(--terracotta);text-decoration:none}
 
   </div>
 
+  <div id="homeMarketing">
   <!-- FOOD PHOTO CAROUSEL -->
   <div style="padding:0 0 4rem;overflow:hidden">
     <div id="carousel-track" style="display:flex;gap:14px;width:max-content;animation:carousel-scroll 30s linear infinite">
@@ -743,6 +808,7 @@ footer a{color:var(--terracotta);text-decoration:none}
     <p style="font-size:12px;color:var(--ink-muted);margin-bottom:1.75rem">After your trial, plans start at just $1.99/mo.</p>
     <button class="btn-primary" onclick="showPage('planner',null)">✦ Start My Free Trial</button>
   </div>
+  </div><!-- /homeMarketing -->
 
   <footer style="background:var(--ink);color:#fff;padding:0;margin-top:0">
     <!-- Main footer content -->
@@ -992,9 +1058,12 @@ footer a{color:var(--terracotta);text-decoration:none}
 ══════════════════════════════════════ -->
 <div class="page" id="page-recipes">
   <div class="container">
-    <div class="page-header">
-      <h2>My <em>Recipes</em></h2>
-      <p>Every recipe from your generated plans — saved and searchable.</p>
+    <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:.75rem">
+      <div>
+        <h2>My <em>Recipe Book</em></h2>
+        <p>Your hand-picked favorites. Tap ♡ on any meal in a plan to save it here.</p>
+      </div>
+      <button onclick="clearRecipeBook()" style="font-size:11px;color:var(--ink-muted);background:none;border:1px solid var(--border-strong);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:'DM Sans',sans-serif">Clear all</button>
     </div>
     <div class="search-bar">
       <span class="search-icon">🔍</span>
@@ -1003,7 +1072,7 @@ footer a{color:var(--terracotta);text-decoration:none}
     <div id="recipesContent">
       <div class="recipes-empty">
         <span class="empty-icon">🍳</span>
-        <p>No recipes yet — generate a meal plan and your recipes will appear here.</p>
+        <p>Your recipe book is yours to curate. Tap the ♡ on any meal in a generated plan — or assign a photo to a meal — and it'll live here.</p>
         <button class="btn-primary" onclick="showPage('planner',null)">✦ Generate a Plan</button>
       </div>
     </div>
@@ -1582,6 +1651,7 @@ footer a{color:var(--terracotta);text-decoration:none}
           </div>
           <button onclick="startPhotoCapture()" id="addPhotoBtn" style="font-size:11px;font-weight:500;color:var(--terracotta);background:rgba(196,98,58,0.08);border:none;border-radius:4px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.02em">📷 Add photo</button>
         </div>
+        <div style="font-size:11px;color:var(--ink-muted);margin-top:3px">Snap what you eat — photos land on your calendar so you can see your week at a glance.</div>
         <div class="day-photos-row" id="dayPhotosRow"></div>
       </div>
       <input type="file" id="mealPhotoInput" accept="image/*" style="display:none" onchange="handleMealPhotoFile(this)">
@@ -1653,10 +1723,10 @@ footer a{color:var(--terracotta);text-decoration:none}
       <button id="logTab-manual" onclick="switchLogTab('manual',this)" style="flex:1;padding:.5rem;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;background:none;color:var(--ink-muted)">Manual</button>
     </div>
     <div id="logForm-photo" style="display:none">
-      <div id="photoPickArea" style="text-align:center;padding:1.5rem 1rem;border:1.5px dashed var(--border-strong);border-radius:10px;margin-bottom:1rem;cursor:pointer" onclick="startPhotoCapture()">
-        <div style="font-size:1.8rem;margin-bottom:.4rem">📷</div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:.2rem">Snap your plate</div>
-        <div style="font-size:11px;color:var(--ink-muted)">Take a photo or choose one from your gallery</div>
+      <div id="photoPickArea" style="text-align:center;padding:1.75rem 1.25rem;border:1.5px dashed rgba(196,98,58,0.4);border-radius:14px;margin-bottom:1rem;cursor:pointer;background:linear-gradient(160deg,#FAF0EB 0%,#FAF7F2 70%)" onclick="startPhotoCapture()">
+        <div style="width:54px;height:54px;border-radius:16px;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .75rem;box-shadow:0 4px 14px rgba(196,98,58,0.12)">📷</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:.35rem;color:var(--ink)">Snap your plate</div>
+        <div style="font-size:12px;color:var(--ink-soft);line-height:1.6;max-width:280px;margin:0 auto">Take a quick photo of your meal. Pantreo identifies what's on the plate, estimates your calories &amp; macros, and adds the photo to your food calendar.</div>
       </div>
       <div id="photoStage" style="display:none">
         <div class="photo-preview-box"><img id="photoPreviewImg" alt="Your meal"></div>
@@ -1866,6 +1936,7 @@ footer a{color:var(--terracotta);text-decoration:none}
     <button class="modal-close" onclick="closeModal()">×</button>
     <h3 id="modalTitle"></h3>
     <p class="modal-meta" id="modalMeta"></p>
+    <button id="modalSaveRecipeBtn" onclick="toggleRecipeFromModal()" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--terracotta);background:rgba(196,98,58,0.08);border:1px solid rgba(196,98,58,0.25);border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:1rem">♡ Save to recipe book</button>
     <div class="scaler-row">
       <span class="scaler-label">Adjust servings</span>
       <div class="scaler-controls">
@@ -1877,6 +1948,15 @@ footer a{color:var(--terracotta);text-decoration:none}
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bnav-item active" data-page="home" onclick="showPage('home',null)"><span class="bnav-ico">⌂</span><span>Home</span></button>
+  <button class="bnav-item" data-page="planner" onclick="showPage('planner',null)"><span class="bnav-ico">✦</span><span>Plan</span></button>
+  <button class="bnav-item" data-page="tracker" onclick="showPage('tracker',null)"><span class="bnav-ico">◷</span><span>Track</span></button>
+  <button class="bnav-item" data-page="recipes" onclick="showPage('recipes',null)"><span class="bnav-ico">♥</span><span>Recipes</span></button>
+  <button class="bnav-item" data-page="profile" onclick="showPage('profile',null)"><span class="bnav-ico">◔</span><span>Profile</span></button>
+</nav>
 
 <div class="toast" id="toast"></div>
 
@@ -1900,11 +1980,12 @@ function showPage(id,btn){
   if(btn){
     btn.classList.add('active');
   } else {
+    const navMap={home:'Home',planner:'Planner',tracker:'Tracker',recipes:'Recipes',pricing:'Pricing',referral:'Free Month 🎁'};
     document.querySelectorAll('.nav-link').forEach(l=>{
-      const t=l.textContent.trim();
-      if(t.toLowerCase()===id||t===id.charAt(0).toUpperCase()+id.slice(1)) l.classList.add('active');
+      if(l.textContent.trim()===navMap[id]) l.classList.add('active');
     });
   }
+  document.querySelectorAll('.bnav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
   window.scrollTo(0,0);
   document.getElementById('mobileMenu').classList.remove('open');
   var _hb=document.querySelector('.hamburger');if(_hb)_hb.classList.remove('active');
@@ -2169,6 +2250,8 @@ async function handleLogout(){
   if(pe) pe.textContent='your@email.com';
   if(hg) hg.style.display='block';
   if(hd) hd.style.display='none';
+  const mk=document.getElementById('homeMarketing');
+  if(mk) mk.style.display='block';
   showPage('home',null);
   showToast('Logged out — see you soon!');
 }
@@ -2352,8 +2435,8 @@ async function loadTrackerDay(){
     });
     trackerLogs=await res.json();
     if(!Array.isArray(trackerLogs)) trackerLogs=[];
-    trackerWater=0;
-  }catch(e){trackerLogs=[];trackerWater=0;}
+    loadWaterLocal();
+  }catch(e){trackerLogs=[];loadWaterLocal();}
   renderTrackerUI();
   loadDayPhotos();
 }
@@ -2413,7 +2496,7 @@ function renderTrackerUI(){
     </div>`).join('');
 }
 function adjustWater(delta){
-  trackerWater=Math.max(0,Math.min(200,trackerWater+delta));
+  trackerWater=Math.max(0,Math.min(200,trackerWater+delta));saveWaterLocal();
   renderTrackerUI();
 }
 
@@ -2536,7 +2619,9 @@ function blobToBase64(blob){
 function populatePhotoRecipeSelect(){
   const sel=document.getElementById('photoRecipeSelect');
   if(!sel) return;
-  const names=[...new Set(savedRecipes.map(r=>r.name))].slice(0,30);
+  const planNames=[];
+  if(planData&&planData.days) planData.days.forEach(d=>['breakfast','lunch','dinner','snack1','snack2','snack3'].forEach(m=>{if(d[m]&&d[m].name)planNames.push(d[m].name);}));
+  const names=[...new Set([...planNames,...savedRecipes.map(r=>r.name)])].slice(0,40);
   sel.innerHTML='<option value="">Not from a plan</option>'+names.map(n=>`<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`).join('');
 }
 async function getScansUsedThisWeek(){
@@ -2603,12 +2688,14 @@ async function scanMealPhoto(){
     const text=await callClaude(
       'Look at this photo of a meal and estimate its nutrition. Identify the foods on the plate and estimate the TOTAL macros for the full serving shown. Be realistic about portion sizes. Return ONLY valid JSON, no markdown: {"name":"short dish description","calories":620,"protein_g":42,"carbs_g":55,"fat_g":24,"confidence":"low|medium|high"}',
       300,
-      {media_type:'image/jpeg',data:pendingPhoto.base64}
+      {media_type:'image/jpeg',data:pendingPhoto.base64},
+      'fast'
     );
     let data;
     try{data=JSON.parse(text.replace(/```json|```/g,'').trim());}
     catch{const m=text.match(/\{[\s\S]*?\}/);data=m?JSON.parse(m[0]):null;}
     if(!data) throw new Error('bad response');
+    if(recipeName) addRecipeToBook(recipeName,currentLogMealType,'');
     scannedPhotoRow=await insertPhotoRow({
       photo_url:up.url,storage_path:up.path,recipe_name:recipeName,meal_type:currentLogMealType,
       food_name:data.name||'Scanned meal',calories:parseInt(data.calories)||0,
@@ -2656,12 +2743,14 @@ async function savePhotoOnly(){
     const recipeName=document.getElementById('photoRecipeSelect').value||null;
     const consent=document.getElementById('photoConsent').checked;
     const up=await uploadPendingPhoto();
+    if(recipeName) addRecipeToBook(recipeName,currentLogMealType,'');
     await insertPhotoRow({photo_url:up.url,storage_path:up.path,recipe_name:recipeName,meal_type:currentLogMealType,food_name:recipeName||'Meal photo',scanned:false,allow_feature:consent});
     pendingPhoto=null;
     showToast('Photo saved ✓');
     closeLogModal();
     resetPhotoTab();
     loadDayPhotos();
+    loadRecipePhotoMap();
   }catch(e){showToast('Could not save photo — try again');}
   btn.textContent='Save photo only (no macros)';btn.disabled=false;
 }
@@ -2755,6 +2844,124 @@ async function loadRecipePhotoMap(){
     renderRecipesPage();
   }catch(e){}
 }
+
+// ── DASHBOARD WEEK-IN-FOOD STRIP ──
+async function renderDashWeekStrip(){
+  const wrap=document.getElementById('dashWeekStrip');
+  if(!wrap) return;
+  if(!photoAccess()){wrap.innerHTML='';return;}
+  const days=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d);}
+  const from=trackerDateStr(days[0]),to=trackerDateStr(days[6]);
+  let byDate={};
+  try{
+    const res=await fetch(SUPABASE_URL+'/rest/v1/meal_photos?user_id=eq.'+getUserId()+'&date=gte.'+from+'&date=lte.'+to+'&select=date,photo_url&order=created_at.desc',{
+      headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userState.token}
+    });
+    const rows=await res.json();
+    if(Array.isArray(rows)) rows.forEach(r=>{if(!byDate[r.date])byDate[r.date]=r.photo_url;});
+  }catch(e){}
+  const todayStr=trackerDateStr(new Date());
+  wrap.innerHTML=`<div class="week-strip">
+    <div class="week-strip-head">
+      <div class="week-strip-title">Your week in food</div>
+      <button class="week-strip-link" onclick="showPage('tracker',null)">Open tracker →</button>
+    </div>
+    <div class="week-days">${days.map(d=>{
+      const ds=trackerDateStr(d);
+      const ph=byDate[ds];
+      return `<div class="week-day ${ds===todayStr?'today':''}" onclick="selectCalDay('${ds}');showPage('tracker',null)">
+        <div class="wd-label">${d.toLocaleDateString('en-US',{weekday:'short'}).slice(0,2)}</div>
+        <div class="wd-photo">${ph?`<img src="${escapeHTML(ph)}" alt="" loading="lazy">`:'·'}</div>
+      </div>`;}).join('')}</div>
+  </div>`;
+}
+
+// ── RECIPE BOOK (curated — user saves only what they love) ──
+function addRecipeToBook(name,type,time){
+  if(!name) return false;
+  if(savedRecipes.find(r=>r.name===name)) return false;
+  savedRecipes.push({name,type:type||'dinner',time:time||'',added:new Date().toLocaleDateString()});
+  localStorage.setItem('pantreo_recipes',JSON.stringify(savedRecipes));
+  if(userState.loggedIn&&userState.token){
+    fetch(SUPABASE_URL+'/rest/v1/recipes',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userState.token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:getUserId(),name,meal_type:type||'dinner',cook_time:time||''})}).catch(()=>{});
+  }
+  renderRecipesPage();
+  return true;
+}
+function removeRecipeFromBook(name){
+  savedRecipes=savedRecipes.filter(r=>r.name!==name);
+  localStorage.setItem('pantreo_recipes',JSON.stringify(savedRecipes));
+  if(userState.loggedIn&&userState.token){
+    fetch(SUPABASE_URL+'/rest/v1/recipes?user_id=eq.'+getUserId()+'&name=eq.'+encodeURIComponent(name),{method:'DELETE',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userState.token}}).catch(()=>{});
+  }
+  renderRecipesPage();
+}
+function toggleRecipeHeart(name,type,time,btn){
+  if(savedRecipes.find(r=>r.name===name)){
+    removeRecipeFromBook(name);
+    if(btn){btn.textContent='♡';btn.classList.remove('saved');}
+    showToast('Removed from recipe book');
+  }else{
+    addRecipeToBook(name,type,time);
+    if(btn){btn.textContent='♥';btn.classList.add('saved');}
+    showToast('♥ Saved to your recipe book');
+  }
+}
+function toggleRecipeFromModal(){
+  if(!currentRecipeName) return;
+  const meta=(document.getElementById('modalMeta').textContent||'').toLowerCase();
+  const type=meta.includes('breakfast')?'breakfast':meta.includes('lunch')?'lunch':meta.includes('snack')?'snack':'dinner';
+  toggleRecipeHeart(currentRecipeName,type,'',null);
+  updateModalSaveBtn();
+  if(planData) renderPlan(); // sync hearts on the grid
+}
+function updateModalSaveBtn(){
+  const b=document.getElementById('modalSaveRecipeBtn');
+  if(!b) return;
+  const saved=!!savedRecipes.find(r=>r.name===currentRecipeName);
+  b.innerHTML=saved?'♥ In your recipe book':'♡ Save to recipe book';
+  b.style.background=saved?'var(--terracotta)':'rgba(196,98,58,0.08)';
+  b.style.color=saved?'#fff':'var(--terracotta)';
+}
+function removeRecipeAt(idx){
+  const r=savedRecipes[idx];
+  if(!r) return;
+  removeRecipeFromBook(r.name);
+  showToast('Removed from recipe book');
+}
+function clearRecipeBook(){
+  if(!savedRecipes.length){showToast('Recipe book is already empty');return;}
+  if(!confirm('Remove all '+savedRecipes.length+' recipes from your book? This can\'t be undone.')) return;
+  savedRecipes=[];
+  localStorage.setItem('pantreo_recipes','[]');
+  if(userState.loggedIn&&userState.token){
+    fetch(SUPABASE_URL+'/rest/v1/recipes?user_id=eq.'+getUserId(),{method:'DELETE',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userState.token}}).catch(()=>{});
+  }
+  renderRecipesPage();
+  showToast('Recipe book cleared');
+}
+
+// ── GENERATION CAPS (per calendar month) ──
+const GEN_LIMITS={basic:10,pro:40,family:40,max:100,trial:40,free:0};
+function genKey(){const d=new Date();return 'pantreoGen_'+(getUserId()||'anon')+'_'+d.getFullYear()+'-'+(d.getMonth()+1);}
+function getGenCount(){return parseInt(localStorage.getItem(genKey())||'0');}
+function countGeneration(){localStorage.setItem(genKey(),String(getGenCount()+1));}
+function checkGenLimit(){
+  const limit=GEN_LIMITS[userState.plan]||0;
+  if(!userState.loggedIn){openAuth('signup');return false;}
+  if(getGenCount()>=limit){
+    showToast(limit?'You\'ve hit this month\'s plan limit ('+limit+'). Resets on the 1st.':'Choose a plan to generate meal plans');
+    if(userState.plan==='basic'||userState.plan==='pro') setTimeout(()=>showPage('pricing',null),1200);
+    return false;
+  }
+  return true;
+}
+
+// ── WATER PERSISTENCE (local) ──
+function waterKey(){return 'pantreoWater_'+(getUserId()||'anon')+'_'+trackerDateStr(trackerDate);}
+function loadWaterLocal(){trackerWater=parseInt(localStorage.getItem(waterKey())||'0');}
+function saveWaterLocal(){localStorage.setItem(waterKey(),String(trackerWater));}
 function openLogModal(mealType){
   if(!userState.loggedIn){openAuth('signup');return;}
   currentLogMealType=mealType;
@@ -2823,7 +3030,7 @@ async function estimateMacros(){
   btn.textContent='Estimating...';btn.disabled=true;
   try{
     const safeName=food.replace(/["\\]/g,' ');
-    const text=await callClaude(`Estimate the nutritional content for a typical single serving of: "${safeName}". Return ONLY valid JSON, no markdown: {"name":"Example Food","calories":320,"protein_g":28,"carbs_g":12,"fat_g":14}`,200);
+    const text=await callClaude(`Estimate the nutritional content for a typical single serving of: "${safeName}". Return ONLY valid JSON, no markdown: {"name":"Example Food","calories":320,"protein_g":28,"carbs_g":12,"fat_g":14}`,200,null,'fast');
     let data;
     try{data=JSON.parse(text.replace(/```json|```/g,'').trim());}
     catch{const m=text.match(/\{[\s\S]*?\}/);data=m?JSON.parse(m[0]):{name:food,calories:0,protein_g:0,carbs_g:0,fat_g:0};}
@@ -2839,7 +3046,7 @@ async function estimateMacros(){
 async function estimateAndLog(food,mealType){
   try{
     const safeName=String(food||'').substring(0,100).replace(/["\\]/g,' ');
-    const text=await callClaude(`Estimate the nutritional content for a typical serving of: "${safeName}". Return ONLY valid JSON: {"name":"Example Food","calories":320,"protein_g":28,"carbs_g":12,"fat_g":14}`,200);
+    const text=await callClaude(`Estimate the nutritional content for a typical serving of: "${safeName}". Return ONLY valid JSON: {"name":"Example Food","calories":320,"protein_g":28,"carbs_g":12,"fat_g":14}`,200,null,'fast');
     let data;
     try{data=JSON.parse(text.replace(/```json|```/g,'').trim());}
     catch{data={name:food,calories:0,protein_g:0,carbs_g:0,fat_g:0};}
@@ -3177,10 +3384,11 @@ function getUserId(){
 }
 
 // ── CLAUDE API — routes through secure serverless function ──
-async function callClaude(prompt,maxTokens,image){
+async function callClaude(prompt,maxTokens,image,task){
   const headers={'Content-Type':'application/json'};
   if(userState.token) headers['Authorization']='Bearer '+userState.token;
   const body={prompt,maxTokens:maxTokens||1500};
+  if(task) body.task=task; // 'plan' → bigger model, 'fast' → cheaper model
   if(image) body.image=image; // {media_type:'image/jpeg',data:'<base64>'}
   const resp=await fetch('/api/generate',{
     method:'POST',
@@ -3212,6 +3420,8 @@ function switchOutTab(which,el){
   document.getElementById(which==='plan'?'outPlan':'outGrocery').classList.add('active');
 }
 async function generatePlan(){
+  // Monthly generation caps — generous for honest use, stops scripted abuse
+  if(!checkGenLimit()) return;
   const servings=document.getElementById('servings').value;
   const days=document.getElementById('days').value;
   const cooktime=document.getElementById('cooktime').value;
@@ -3323,10 +3533,17 @@ METHODS: pan-seared, oven-roasted, slow-braised, grilled, smoked, stir-fried, br
 - Each meal must feel genuinely DIFFERENT in flavor profile, cooking method, and cuisine
 - Make meals sound APPETIZING and specific (e.g. "Pan-Seared Ribeye with Garlic Herb Butter" not just "Steak")`;
 
+  // Recipe book favorites — occasionally resurface meals the user chose to save
+  let favoritesStr='';
+  if(savedRecipes.length&&Math.random()<0.6){
+    const pool=[...savedRecipes].sort(()=>Math.random()-0.5).slice(0,5).map(r=>r.name);
+    favoritesStr=`\nUSER FAVORITES (from their saved recipe book): ${pool.join('; ')}. If (and only if) one of these fits the cuisine, diet, and budget above, you MAY include AT MOST ONE of them (or a close variation) somewhere in the plan. Most meals must still be brand new — never include more than one favorite.`;
+  }
+
   const prompt=`[${seed}] Create a ${days} meal plan for ${servings} with ${mealsInstruction} per day. ${cuisineInstruction} Max cook time: ${cooktime}. ${budgetStr}${dietStr}${notesStr}${macroStr}
 PROTEINS: ${bp.proteins}
 
-${diversityRules}
+${diversityRules}${favoritesStr}
 IMPORTANT: Include REAL specific meal names for EVERY day. No placeholders.
 Return ONLY valid JSON, no markdown, no explanation:
 {"title":"short evocative plan title","days":[{"day":"Monday",${mealFields}},{"day":"Tuesday",${mealFields}},{"day":"Wednesday",${mealFields}}],"nutrition":{"avgCalories":1950,"avgProtein":"85g","avgCarbs":"220g","avgFat":"65g"},"grocery":{"Produce":["2 bell peppers"],"Proteins":["1 lb chicken thighs"],"Dairy":[],"Pantry":["olive oil"],"Bakery":[],"Frozen":[],"Other":[]${isPro?',"estimatedTotal":"$52.00"':''}}}
@@ -3340,7 +3557,7 @@ Generate exactly the number of days requested. Every meal slot must have a uniqu
     document.getElementById('loadingMsg').textContent=loadingMessages[msgIdx];
   },2000);
   try{
-    const text=await callClaude(prompt,2500);
+    const text=await callClaude(prompt,2500,null,'plan');
     let parsed;
     try{
       parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
@@ -3354,26 +3571,13 @@ Generate exactly the number of days requested. Every meal slot must have a uniqu
       throw new Error('Plan was incomplete. Please try generating again.');
     }
     planData=parsed;
+    countGeneration();
     clearInterval(msgInterval);loading.classList.remove('active');
     renderPlan();
     // Reset save button
     const saveBtn=document.getElementById('savePlanBtn');
     if(saveBtn){saveBtn.textContent='💾 Save plan';saveBtn.disabled=false;}
-    // Save all meals to recipes
-    planData.days.forEach(day=>{
-      ['breakfast','lunch','dinner'].filter(m=>day[m]).forEach(m=>{
-        const name=day[m].name;
-        if(!savedRecipes.find(r=>r.name===name)){
-          savedRecipes.push({name,type:m,day:day.day,time:day[m].time,added:new Date().toLocaleDateString()});
-          // Save to Supabase if logged in
-          if(userState.loggedIn&&userState.token){
-            fetch(SUPABASE_URL+'/rest/v1/recipes',{method:'POST',headers:{'apikey':SUPABASE_ANON,'Authorization':'Bearer '+userState.token,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({user_id:getUserId(),name,meal_type:m,cook_time:day[m].time})}).catch(()=>{});
-          }
-        }
-      });
-    });
-    localStorage.setItem('pantreo_recipes',JSON.stringify(savedRecipes));
-    renderRecipesPage();
+    // Recipes are no longer auto-saved — users tap ♡ on meals they actually like.
   }catch(e){
     clearInterval(msgInterval);
     loading.classList.remove('active');
@@ -3408,7 +3612,7 @@ ${budget==='Budget-friendly'?'Keep ingredients cheap and common; beans/lentils/e
 Make the meal name specific and appetizing (e.g. "Honey Garlic Chicken Thighs" not just "Chicken").
 Return ONLY valid JSON, no markdown: {"name":"specific meal name","time":"20 min","description":"one sentence description"}`;
   try{
-    const text=await callClaude(prompt,300);
+    const text=await callClaude(prompt,300,null,'fast');
     let meal;
     try{meal=JSON.parse(text.replace(/```json|```/g,'').trim());}
     catch{const m=text.match(/\{[\s\S]*?\}/);if(m)meal=JSON.parse(m[0]);else throw new Error();}
@@ -3446,7 +3650,7 @@ Make meal names specific and appetizing.
 Return ONLY valid JSON, no markdown: {"day":"${dayName}","breakfast":{"name":"meal","time":"15 min"},"lunch":{"name":"meal","time":"20 min"},"dinner":{"name":"meal","time":"35 min"}}
 Only include meal keys matching the requested combo.`;
   try{
-    const text=await callClaude(prompt,400);
+    const text=await callClaude(prompt,400,null,'fast');
     const newDay=JSON.parse(text.replace(/```json|```/g,'').trim());
     const idx=planData.days.findIndex(d=>d.day===dayName);
     if(idx!==-1) planData.days[idx]=newDay;
@@ -3498,7 +3702,7 @@ function renderWeekGrid(){
       <div class="day-meals">${allSlots.filter(m=>day[m]).map(m=>`
         <div class="meal-slot" onclick="openRecipe('${escapeSingleQuote(day.day)}','${m}','${escapeSingleQuote(day[m].name||'')}')">
           <div class="meal-type ${m.startsWith('snack')?'snack':m}">${slotLabels[m]}</div>
-          <div class="meal-name">${escapeHTML(day[m].name)}${isPro?`<button class="regen-meal-btn" title="Regenerate this meal" onclick="event.stopPropagation();regenerateMeal('${escapeSingleQuote(day.day)}','${m}',this)">↻</button>`:''}</div>
+          <div class="meal-name">${escapeHTML(day[m].name)}<span style="display:inline-flex;gap:2px;vertical-align:middle"><button class="regen-meal-btn heart-btn ${savedRecipes.find(r=>r.name===day[m].name)?'saved':''}" title="Save to recipe book" onclick="event.stopPropagation();toggleRecipeHeart('${escapeSingleQuote(day[m].name||'')}','${m.startsWith('snack')?'snack':m}','${escapeSingleQuote(day[m].time||'')}',this)">${savedRecipes.find(r=>r.name===day[m].name)?'♥':'♡'}</button>${isPro?`<button class="regen-meal-btn" title="Regenerate this meal" onclick="event.stopPropagation();regenerateMeal('${escapeSingleQuote(day.day)}','${m}',this)">↻</button>`:''}</span></div>
         </div>`).join('')}</div>
     </div>`).join('');
 }
@@ -3526,6 +3730,9 @@ const mealPhotos=[
 function showDashboard(name){
   document.getElementById('heroGuest').style.display='none';
   document.getElementById('heroDashboard').style.display='block';
+  const mk=document.getElementById('homeMarketing');
+  if(mk) mk.style.display='none';
+  renderDashWeekStrip();
   // Greeting based on time
   const h=new Date().getHours();
   const greeting=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
@@ -3762,11 +3969,12 @@ function recipeThumbHTML(r){
 function renderRecipesPage(){
   const content=document.getElementById('recipesContent');
   if(!savedRecipes.length){
-    content.innerHTML=`<div class="recipes-empty"><span class="empty-icon">🍳</span><p>No recipes yet — generate a meal plan and your recipes will appear here.</p><button class="btn-primary" onclick="showPage('planner',null)">✦ Generate a Plan</button></div>`;
+    content.innerHTML=`<div class="recipes-empty"><span class="empty-icon">🍳</span><p>Your recipe book is yours to curate. Tap the ♡ on any meal in a generated plan — or assign a photo to a meal — and it'll live here.</p><button class="btn-primary" onclick="showPage('planner',null)">✦ Generate a Plan</button></div>`;
     return;
   }
   content.innerHTML=`<div class="recipes-grid">${savedRecipes.map((r,i)=>`
-    <div class="recipe-card" onclick="openSavedRecipe(${i})">
+    <div class="recipe-card" onclick="openSavedRecipe(${i})" style="position:relative">
+      <button title="Remove from book" onclick="event.stopPropagation();removeRecipeAt(${i})" style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;border:none;background:rgba(28,24,20,0.45);color:#fff;font-size:11px;cursor:pointer;z-index:2">✕</button>
       ${recipeThumbHTML(r)}
       <div class="recipe-info">
         <div class="recipe-tag">${escapeHTML(r.type)} · ${escapeHTML(r.time||'')}</div>
@@ -3780,7 +3988,8 @@ function filterRecipes(q){
   const content=document.getElementById('recipesContent');
   if(!filtered.length){content.innerHTML='<div style="text-align:center;padding:3rem;color:var(--ink-muted);font-size:14px">No recipes match your search.</div>';return;}
   content.innerHTML=`<div class="recipes-grid">${filtered.map((r,i)=>`
-    <div class="recipe-card" onclick="openSavedRecipe(${savedRecipes.indexOf(r)})">
+    <div class="recipe-card" onclick="openSavedRecipe(${savedRecipes.indexOf(r)})" style="position:relative">
+      <button title="Remove from book" onclick="event.stopPropagation();removeRecipeAt(${savedRecipes.indexOf(r)})" style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;border:none;background:rgba(28,24,20,0.45);color:#fff;font-size:11px;cursor:pointer;z-index:2">✕</button>
       ${recipeThumbHTML(r)}
       <div class="recipe-info">
         <div class="recipe-tag">${escapeHTML(r.type)} · ${escapeHTML(r.time||'')}</div>
@@ -3798,6 +4007,7 @@ function openSavedRecipe(idx){
   document.getElementById('modalMeta').textContent=(r.type||'')+' · '+(r.time||'');
   document.getElementById('scalerVal').textContent='2 servings';
   document.getElementById('modalOverlay').classList.add('active');
+  updateModalSaveBtn();
   fetchRecipe(r.name,false);
 }
 
@@ -3821,6 +4031,7 @@ async function openRecipe(day,mealType,mealName){
   document.getElementById('modalTitle').textContent=mealName;
   document.getElementById('modalMeta').textContent=day+' · '+mealType.charAt(0).toUpperCase()+mealType.slice(1);
   document.getElementById('modalOverlay').classList.add('active');
+  updateModalSaveBtn();
   fetchRecipe(mealName,false);
 }
 async function fetchRecipe(mealName,forceRefresh){
@@ -3846,7 +4057,7 @@ INSTRUCTIONS
 2. Step
 
 TIPS
-One brief tip.`,800);
+One brief tip.`,800,null,'fast');
     recipeCache[ck]=text;
     if(currentRecipeName===mealName) document.getElementById('modalBody').textContent=text;
   }catch(e){document.getElementById('modalBody').textContent='Could not load recipe. Please try again.';}
