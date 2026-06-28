@@ -661,7 +661,7 @@ body:not(.logged-out) .nav-guest-only{display:none!important}
     </svg>
   </a>
   <div class="nav-links">
-    <button class="nav-link active" onclick="showPage('home',this)">Home</button>
+    <button class="nav-link active" id="navHomeLink" onclick="showPage('home',this)">Home</button>
     <button class="nav-link nav-dash" onclick="showPage('planner',this)">Planner</button>
     <button class="nav-link nav-dash" onclick="showPage('tracker',this)">Tracker</button>
     <button class="nav-link nav-dash" onclick="showPage('progress',this)">Progress</button>
@@ -686,7 +686,7 @@ body:not(.logged-out) .nav-guest-only{display:none!important}
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <div class="mobile-link" onclick="showPage('home',null);closeMobile()">Home</div>
+  <div class="mobile-link" id="mobileHomeLink" onclick="showPage('home',null);closeMobile()">Home</div>
   <div class="mobile-link nav-dash" onclick="showPage('planner',null);closeMobile()">Planner</div>
   <div class="mobile-link nav-dash" onclick="showPage('tracker',null);closeMobile()">Tracker</div>
   <div class="mobile-link nav-dash" onclick="showPage('progress',null);closeMobile()">Progress</div>
@@ -694,6 +694,7 @@ body:not(.logged-out) .nav-guest-only{display:none!important}
   <div class="mobile-link" onclick="showPage('pricing',null);closeMobile()">Pricing</div>
   <div class="mobile-link" onclick="showPage('referral',null);closeMobile()" style="color:var(--terracotta)">Free Month 🎁</div>
   <div class="mobile-link nav-guest-only" onclick="openAuth('login');closeMobile()">Log in</div>
+  <div class="mobile-link nav-dash" onclick="handleLogout();closeMobile()" style="color:var(--terracotta);border-top:1px solid var(--border);margin-top:.25rem">Log out</div>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -2147,7 +2148,7 @@ body:not(.logged-out) .nav-guest-only{display:none!important}
 
 <!-- BOTTOM NAV (mobile) -->
 <nav class="bottom-nav" id="bottomNav">
-  <button class="bnav-item active" data-page="home" onclick="showPage('home',null)"><span class="bnav-ico">⌂</span><span>Home</span></button>
+  <button class="bnav-item active" data-page="home" onclick="showPage('home',null)"><span class="bnav-ico">⌂</span><span>Dashboard</span></button>
   <button class="bnav-item" data-page="planner" onclick="showPage('planner',null)"><span class="bnav-ico">✦</span><span>Plan</span></button>
   <button class="bnav-item" data-page="tracker" onclick="showPage('tracker',null)"><span class="bnav-ico">◷</span><span>Track</span></button>
   <button class="bnav-item" data-page="recipes" onclick="showPage('recipes',null)"><span class="bnav-ico">▦</span><span>Recipes</span></button>
@@ -2369,6 +2370,7 @@ async function applySession(data,isNew){
   if(navGuest) navGuest.style.display='none';
   if(navUser) navUser.style.display='flex';
   document.body.classList.remove('logged-out');
+  {const _h=document.getElementById('navHomeLink');if(_h)_h.textContent='Dashboard';const _m=document.getElementById('mobileHomeLink');if(_m)_m.textContent='Dashboard';}
   if(navAvatar) navAvatar.textContent=avatar;
   const upgradeBtn=document.getElementById('upgradeBtn');
   if(plan==='max'&&upgradeBtn) upgradeBtn.style.display='none';
@@ -2475,6 +2477,7 @@ async function handleLogout(){
   if(ng) ng.style.display='flex';
   if(nu) nu.style.display='none';
   document.body.classList.add('logged-out');
+  {const _h=document.getElementById('navHomeLink');if(_h)_h.textContent='Home';const _m=document.getElementById('mobileHomeLink');if(_m)_m.textContent='Home';}
   if(ub) ub.style.display='flex';
   if(pn) pn.textContent='Your Name';
   if(pe) pe.textContent='your@email.com';
