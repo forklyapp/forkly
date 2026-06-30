@@ -4270,7 +4270,7 @@ async function callClaude(prompt,maxTokens,image,task){
     headers,
     body:JSON.stringify(body)
   });
-  if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error||'Something went wrong');}
+  if(!resp.ok){const e=await resp.json().catch(()=>({}));console.error('callClaude /api/generate failed:',resp.status,e);throw new Error(String(e.error||('Generation failed ('+resp.status+')')).slice(0,140));}
   const data=await resp.json();
   return data.text;
 }
@@ -4469,7 +4469,9 @@ Generate exactly the number of days requested. Every meal slot must have a uniqu
     clearInterval(msgInterval);
     loading.classList.remove('active');
     document.getElementById('section1').classList.add('active');
-    showToast('Error: '+(e.message||'Something went wrong'));
+    console.error('Plan generation failed:',e);
+    const _raw=(e&&e.message)?String(e.message):'';
+    showToast(/limit|incomplete|unexpected|select/i.test(_raw)&&_raw.length<120?_raw:"Couldn't generate your plan just now — please try again in a moment.");
   }
 }
 // Shared protein guidance so single-meal / single-day regeneration respects the budget too
