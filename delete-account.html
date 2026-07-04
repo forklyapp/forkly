@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delete Your Account & Data — Pantreo</title>
+<meta name="description" content="Request permanent deletion of your Pantreo account and all associated data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF7F2; --parchment:#F0EBE0; --ink:#1C1814; --ink-soft:#4A4540;
+    --ink-muted:#8A8278; --terracotta:#C4623A; --sage:#6B7F5E;
+    --border:rgba(28,24,20,0.12); --border-strong:rgba(28,24,20,0.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:'DM Sans',sans-serif; line-height:1.6;
+    -webkit-font-smoothing:antialiased; padding:0 1.25rem;
+  }
+  .wrap{max-width:680px; margin:0 auto; padding:2.5rem 0 4rem}
+  .brand{display:flex; align-items:center; gap:.6rem; margin-bottom:2.5rem}
+  .brand-mark{
+    width:38px; height:38px; border-radius:50%; background:var(--terracotta);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; font-weight:700; font-size:20px;
+  }
+  .brand-name{font-family:'Playfair Display',serif; font-size:22px; font-weight:600; font-style:italic}
+  h1{font-family:'Playfair Display',serif; font-size:2rem; font-weight:600; line-height:1.15; margin-bottom:.75rem}
+  h1 em{color:var(--terracotta); font-style:italic}
+  .lead{color:var(--ink-soft); font-size:1.05rem; margin-bottom:2rem}
+  h2{font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:600; margin:2rem 0 .75rem}
+  p{margin-bottom:1rem; color:var(--ink-soft)}
+  ul{margin:0 0 1rem 1.1rem; color:var(--ink-soft)}
+  li{margin-bottom:.4rem}
+  strong{color:var(--ink); font-weight:600}
+  .card{
+    background:#fff; border:1px solid var(--border); border-radius:14px;
+    padding:1.5rem 1.6rem; margin:1.5rem 0;
+  }
+  .steps{counter-reset:step; list-style:none; margin-left:0}
+  .steps li{counter-increment:step; position:relative; padding-left:2.4rem; margin-bottom:1rem}
+  .steps li::before{
+    content:counter(step); position:absolute; left:0; top:-1px;
+    width:1.7rem; height:1.7rem; border-radius:50%; background:var(--parchment);
+    color:var(--ink); font-weight:600; font-size:.85rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .btn{
+    display:inline-block; background:var(--terracotta); color:#fff;
+    text-decoration:none; font-weight:600; font-size:1rem;
+    padding:.85rem 1.6rem; border-radius:11px; margin:.5rem 0 1rem;
+  }
+  .email{color:var(--terracotta); font-weight:600; text-decoration:none}
+  .muted{color:var(--ink-muted); font-size:.9rem}
+  hr{border:none; border-top:1px solid var(--border); margin:2.5rem 0}
+  .foot{color:var(--ink-muted); font-size:.85rem}
+  .foot a{color:var(--ink-muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="brand-mark">P</div>
+    <div class="brand-name">Pantreo</div>
+  </div>
+
+  <h1>Delete Your <em>Account &amp; Data</em></h1>
+  <p class="lead">You can permanently delete your Pantreo account and all of the data associated with it at any time. Here's exactly what happens and how to request it.</p>
+
+  <h2>How to request deletion</h2>
+  <div class="card">
+    <ol class="steps">
+      <li>Email us at <a class="email" href="mailto:privacy@pantreo.kitchen?subject=Delete%20my%20account&body=Please%20permanently%20delete%20my%20Pantreo%20account%20and%20all%20associated%20data.%0A%0AMy%20account%20email%3A%20">privacy@pantreo.kitchen</a> <strong>from the email address associated with your account</strong>.</li>
+      <li>Use the subject line <strong>"Delete my account"</strong> and include your account email in the message so we can locate it.</li>
+      <li>We'll verify the request, delete your data, and email you a confirmation once it's complete.</li>
+    </ol>
+    <a class="btn" href="mailto:privacy@pantreo.kitchen?subject=Delete%20my%20account&body=Please%20permanently%20delete%20my%20Pantreo%20account%20and%20all%20associated%20data.%0A%0AMy%20account%20email%3A%20">Request account deletion</a>
+    <p class="muted">Requesting from your account email helps us verify it's really you. If you can't email from that address, contact us and we'll verify another way.</p>
+  </div>
+
+  <h2>What gets deleted</h2>
+  <p>When your request is processed, we permanently remove <strong>all</strong> of the following:</p>
+  <ul>
+    <li>Your account and login credentials</li>
+    <li>Your profile (name, email, and any age, height, or weight you entered)</li>
+    <li>All meal plans and saved recipes</li>
+    <li>Your pantry items</li>
+    <li>Meal photos and progress photos</li>
+    <li>Food logs, water logs, and macro history</li>
+    <li>Meal Points, streaks, achievements, and preferences</li>
+  </ul>
+  <p>This action is <strong>permanent and cannot be undone</strong>.</p>
+
+  <h2>Timeline</h2>
+  <p>Deletion requests are processed within <strong>30 days</strong>, and usually much sooner. You'll receive an email confirmation when your data has been removed.</p>
+
+  <h2>A note on billing &amp; legal records</h2>
+  <p>If you have an active paid subscription, it will be canceled as part of the deletion. We may retain a minimal record of past transactions (such as invoices) only where required by law — for example, tax and accounting obligations — for the period the law requires. These records are never used for any other purpose and contain no meal, health, or usage data.</p>
+
+  <hr>
+  <p class="foot">
+    Questions about your data? Email <a href="mailto:privacy@pantreo.kitchen">privacy@pantreo.kitchen</a>.<br>
+    See also our <a href="/privacy.html">Privacy Policy</a> · <a href="/">Return to Pantreo</a><br>
+    &copy; 2026 Pantreo LLC
+  </p>
+
+</div>
+</body>
+</html>
