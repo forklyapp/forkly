@@ -2288,7 +2288,7 @@ async function handleLogin(){
     const data=await sbPost('/token?grant_type=password',{email,password:pass});
     if(data.error){
       const blob=((data.error||'')+' '+(data.error_description||'')).toLowerCase();
-      const msg=/grant|credential|invalid|password/.test(blob)?'Incorrect email or password.':(data.error_description||'Could not log in — please try again.');
+      const msg=/not.?confirmed|confirm/.test(blob)?'Please confirm your email first — check your inbox (and spam).':(/grant|credential|invalid|password/.test(blob)?'Incorrect email or password.':(data.error_description||'Could not log in — please try again.'));
       if(errEl){errEl.textContent=msg;errEl.style.display='block';}else{showToast(msg);}
       return;
     }
